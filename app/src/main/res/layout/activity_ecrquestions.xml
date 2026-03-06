@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/tv_ecr_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Relationship Style"
+            android:textColor="#333333"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_ecr_subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Please rate how much you agree or disagree with each statement (1 = Strongly Disagree, 7 = Strongly Agree)"
+            android:textAlignment="center"
+            android:textColor="#757575"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_ecr_title" />
+
+        <LinearLayout
+            android:id="@+id/ll_questions_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/tv_ecr_subtitle">
+
+            <!-- Question 1 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1. It helps to turn to this person in times of need."
+                android:textColor="#333333"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/rg_q1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="1" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="2" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="3" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="4" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_5" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="5" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_6" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="6" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_7" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="7" android:textColor="@color/black" />
+            </RadioGroup>
+
+            <!-- Question 2 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="2. I usually discuss my problems and concerns with this person."
+                android:textColor="#333333"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/rg_q2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="1" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="2" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="3" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="4" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_5" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="5" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_6" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="6" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_7" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="7" android:textColor="@color/black" />
+            </RadioGroup>
+
+            <!-- Question 3 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="3. I talk things over with this person."
+                android:textColor="#333333"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/rg_q3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="1" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="2" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="3" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="4" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_5" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="5" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_6" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="6" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_7" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="7" android:textColor="@color/black" />
+            </RadioGroup>
+
+            <!-- Question 4 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="4. I find it easy to depend on this person."
+                android:textColor="#333333"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/rg_q4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="1" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="2" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="3" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="4" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_5" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="5" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_6" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="6" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_7" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="7" android:textColor="@color/black" />
+            </RadioGroup>
+
+            <!-- Question 5 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="5. I don't feel comfortable opening up to this person."
+                android:textColor="#333333"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/rg_q5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="1" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="2" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="3" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="4" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_5" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="5" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_6" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="6" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_7" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="7" android:textColor="@color/black" />
+            </RadioGroup>
+
+            <!-- Question 6 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="6. I prefer not to show this person how I feel deep down."
+                android:textColor="#333333"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/rg_q6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="1" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="2" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="3" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="4" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_5" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="5" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_6" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="6" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_7" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="7" android:textColor="@color/black" />
+            </RadioGroup>
+
+            <!-- Question 7 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="7. I often worry that this person doesn't really care for me."
+                android:textColor="#333333"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/rg_q7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="1" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="2" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="3" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="4" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_5" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="5" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_6" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="6" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_7" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="7" android:textColor="@color/black" />
+            </RadioGroup>
+
+            <!-- Question 8 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="8. I'm afraid that this person may abandon me."
+                android:textColor="#333333"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/rg_q8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="1" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="2" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="3" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="4" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_5" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="5" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_6" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="6" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_7" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="7" android:textColor="@color/black" />
+            </RadioGroup>
+
+            <!-- Question 9 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="9. I worry that this person won't care about me as much as I care about him or her."
+                android:textColor="#333333"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/rg_q9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="1" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="2" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="3" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="4" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_5" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="5" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_6" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="6" android:textColor="@color/black" />
+                <RadioButton  android:buttonTint="#E91E63" android:id="@+id/q1_7" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="7" android:textColor="@color/black" />
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_submit_ecr"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            android:backgroundTint="#E91E63"
+            android:text="Complete Assessment"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            app:cornerRadius="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ll_questions_container" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

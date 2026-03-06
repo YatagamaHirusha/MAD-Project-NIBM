@@ -1,4 +1,4 @@
-package com.mad.cw;
+package com.mad.cw.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,21 +8,22 @@ import android.widget.Button;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.mad.cw.auth.login;
+import com.mad.cw.R;
 
-public class MainActivity extends AppCompatActivity {
+public class matchSelection extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_match_selection);
 
-        Button logoutBtn = findViewById(R.id.btn_logout);
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
+        Button continueBtn = findViewById(R.id.btn_save_preferences);
+        continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, login.class);
+                // Navigate to ECR-RS Assessment after selection
+                Intent intent = new Intent(matchSelection.this, ecrquestions.class);
                 startActivity(intent);
                 finish();
             }

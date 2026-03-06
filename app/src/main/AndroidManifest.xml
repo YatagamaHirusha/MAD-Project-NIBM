@@ -11,21 +11,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Cw">
-        <activity
-            android:name=".auth.register"
-            android:exported="false" />
+
         <activity
             android:name=".auth.login"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".auth.register"
+            android:exported="false" />
+
+        <activity
+            android:name=".auth.matchSelection"
+            android:exported="false" />
+
+        <activity
+            android:name=".auth.ecrquestions"
+            android:exported="false" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

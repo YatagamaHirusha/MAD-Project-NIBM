@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:padding="24dp"
     android:background="#FFFFFF"
-    tools:context=".MainActivity">
+    tools:context="com.mad.cw.auth.login">
 
     <ImageView
         android:id="@+id/iv_logo"
@@ -19,18 +19,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="#E91E63" /> <TextView
-    android:id="@+id/tv_welcome"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
-    android:text="Find Your Match"
-    android:textColor="#333333"
-    android:textSize="28sp"
-    android:textStyle="bold"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/iv_logo" />
+        app:tint="#E91E63" />
+
+    <TextView
+        android:id="@+id/tv_welcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Find Your Match"
+        android:textColor="#333333"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_logo" />
 
     <TextView
         android:id="@+id/tv_subtitle"
@@ -50,9 +52,11 @@
         android:layout_height="56dp"
         android:layout_marginTop="48dp"
         android:background="@android:drawable/editbox_background"
-        android:hint="Email Address"
+        android:hint="Enter Email Address"
         android:inputType="textEmailAddress"
         android:padding="12dp"
+        android:textColorHint="#9E9E9E"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_subtitle" />
@@ -63,9 +67,11 @@
         android:layout_height="56dp"
         android:layout_marginTop="16dp"
         android:background="@android:drawable/editbox_background"
-        android:hint="Password"
+        android:hint="Enter Your Password"
+        android:textColorHint="#9E9E9E"
         android:inputType="textPassword"
         android:padding="12dp"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_email" />
@@ -87,6 +93,7 @@
         android:layout_height="60dp"
         android:layout_marginTop="32dp"
         android:backgroundTint="#E91E63"
+
         android:text="Login"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
