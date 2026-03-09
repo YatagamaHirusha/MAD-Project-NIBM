@@ -34,7 +34,7 @@
             android:layout_marginStart="12dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/iv_call"
+            app:layout_constraintEnd_toStartOf="@+id/iv_more"
             app:layout_constraintStart_toEndOf="@+id/iv_header_avatar"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -54,17 +54,6 @@
                 android:textColor="#4CAF50"
                 android:textSize="12sp" />
         </LinearLayout>
-
-        <ImageView
-            android:id="@+id/iv_call"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="16dp"
-            android:src="@android:drawable/ic_menu_call"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/iv_more"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="#E91E63" />
 
         <ImageView
             android:id="@+id/iv_more"
