@@ -12,9 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Cw">
         <activity
-            android:name=".Welcome"
-            android:exported="false" />
-        <activity
             android:name=".auth.register"
             android:exported="false" />
         <activity
