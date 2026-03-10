@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_hub"
+        android:icon="@drawable/ic_nav_hub"
+        android:title="Hub" />
+
+    <item
+        android:id="@+id/nav_chatbot"
+        android:icon="@drawable/ic_nav_chatbot"
+        android:title="AI Coach" />
+
+    <item
+        android:id="@+id/nav_inbox"
+        android:icon="@drawable/ic_nav_inbox"
+        android:title="Inbox" />
+
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/ic_nav_profile"
+        android:title="Profile" />
+</menu>
