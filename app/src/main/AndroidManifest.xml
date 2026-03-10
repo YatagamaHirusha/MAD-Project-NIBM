@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Cw">
         <activity
-            android:name=".Welcome"
+            android:name=".Dashboard"
             android:exported="false" />
         <activity
             android:name=".auth.register"
