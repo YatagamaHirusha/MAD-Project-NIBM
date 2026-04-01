@@ -25,9 +25,6 @@
             android:name=".Questionnaire"
             android:exported="false" />
         <activity
-            android:name=".Dashboard"
-            android:exported="false" />
-        <activity
             android:name=".Welcome"
             android:exported="false" />
         <activity

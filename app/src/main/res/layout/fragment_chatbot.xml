@@ -45,6 +45,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginEnd="16dp"
+            android:contentDescription="@string/cd_clear_chat"
             android:padding="4dp"
             android:src="@android:drawable/ic_menu_delete"
             app:tint="#9E9E9E"
@@ -84,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="Analyze my ERC-RS score"
+                android:text="Analyze my ECR-RS score"
                 android:textColor="#E91E63"
                 app:chipBackgroundColor="#FCE4EC"
                 app:chipStrokeWidth="0dp" />

@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">cw</string>
+    <string name="cd_back">Back</string>
+    <string name="cd_profile">Open profile</string>
+    <string name="cd_clear_chat">Clear conversation</string>
+    <string name="ecr_answer_all">Please answer every question before continuing.</string>
+    <string name="ecr_saved_returning_home">Saved. Back to your journey.</string>
+    <string name="hint_location">Current location</string>
+    <string name="hint_occupation">Occupation</string>
+    <string name="section_interest_categories">Your interests</string>
+    <string name="save_interests">Save interests</string>
+    <string name="lifestyle_need_location_occupation">Please choose location and occupation.</string>
+    <string name="lifestyle_need_category">Please select at least one option under: %1$s</string>
+    <string name="lifestyle_saved">Interests saved</string>
 </resources>
