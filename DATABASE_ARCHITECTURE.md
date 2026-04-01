@@ -10,6 +10,24 @@ Design goals:
 
 ---
 
+## Remote database: Supabase (chosen stack)
+
+The project uses **[Supabase](https://supabase.com)** as the managed **PostgreSQL** backend.
+
+| Piece | Role |
+|-------|------|
+| **Postgres** | Tables for profiles, ECR, interests, matches, messages (see §3). |
+| **PostgREST** | HTTP API at `/rest/v1/` — used from Android via **OkHttp** (`com.mad.cw.supabase.SupabaseRestClient`). |
+| **Auth (GoTrue)** | Sign-up / sign-in; JWT for `Authorization: Bearer …` on API calls. |
+| **RLS** | **Required.** The **anon key** is embedded in the app (`BuildConfig`); security comes from **Row Level Security**, not from hiding the key. |
+| **Realtime** | Optional for live chat. |
+
+**Secrets:** Only **`supabase.anon.key`** is in the client (via `local.properties` → `BuildConfig`). Never ship **service_role** or the database password in the APK.
+
+Setup steps: **`SUPABASE_SETUP.md`**. Starter SQL: **`sql/supabase_initial_schema.sql`**.
+
+---
+
 ## 1. High-level data domains
 
 | Domain | Purpose |
@@ -83,7 +101,7 @@ These should gain **local persistence** (and optional sync) when you harden the 
 
 ## 3. Target logical schema (server database)
 
-Below is a **normalized** relational shape you can implement in PostgreSQL, MySQL, or similar. Adjust types (UUID vs BIGINT) to your stack.
+Below is a **normalized** relational shape for **Supabase Postgres**. Adjust types (UUID vs BIGINT) if you fork the stack.
 
 ### 3.1 Core entities
 
@@ -222,7 +240,7 @@ After migration, `ProfileFragment` / `Questionnaire` / `LifestyleFragment` shoul
 | Layer | Today | Direction |
 |-------|--------|-----------|
 | **Device** | Three `SharedPreferences` files + in-memory chat | **Room + DataStore**, optional encrypted tokens |
-| **Server** | Not wired | **Relational DB** with `users`, profiles, ECR, interests, matches, messages |
+| **Server** | Not fully wired | **Supabase Postgres** + PostgREST; RLS + Auth; tables per §3 / `sql/supabase_initial_schema.sql` |
 | **ML** | CSV training only | **Same feature columns** as CSV for online scoring; store raw + derived scores |
 
 This file is the baseline for backend API design and the next migration of the Android data layer.
