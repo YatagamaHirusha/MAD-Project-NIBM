@@ -86,4 +86,8 @@
     <string name="profile_photo_saved_cloud">Photo saved to your account</string>
     <string name="profile_photo_save_failed">Could not save that photo. Try another image.</string>
     <string name="profile_photo_cloud_failed">Photo saved on this device only. Cloud upload failed: %1$s</string>
+    <string name="ai_coach_missing_api_key">AI Coach is not configured: %1$s</string>
+    <string name="ai_coach_session_failed">Could not start the AI session. Check your network and API key.</string>
+    <string name="ai_coach_send_failed">Sorry, something went wrong: %1$s</string>
+    <string name="ai_coach_empty_reply">I did not get a text reply. Please try again.</string>
 </resources>

@@ -30,12 +30,15 @@ android {
         }
         val supabaseUrl = localProps.getProperty("supabase.url", "")
         val supabaseAnonKey = localProps.getProperty("supabase.anon.key", "")
+        val geminiApiKey =
+            localProps.getProperty("GEMINI_API_KEY", localProps.getProperty("gemini.api.key", ""))
 
         fun escapeForBuildConfig(value: String): String =
             value.replace("\\", "\\\\").replace("\"", "\\\"")
 
         buildConfigField("String", "SUPABASE_URL", "\"${escapeForBuildConfig(supabaseUrl)}\"")
         buildConfigField("String", "SUPABASE_ANON_KEY", "\"${escapeForBuildConfig(supabaseAnonKey)}\"")
+        buildConfigField("String", "GEMINI_API_KEY", "\"${escapeForBuildConfig(geminiApiKey)}\"")
     }
 
     buildTypes {
@@ -54,6 +57,9 @@ android {
 }
 
 dependencies {
+    // Google AI Gemini (Kotlin SDK; use ChatFutures / GenerativeModel from Java)
+    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
+    implementation("com.google.guava:guava:33.3.1-android")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel:2.8.7")
     implementation("androidx.lifecycle:lifecycle-livedata:2.8.7")
