@@ -67,8 +67,24 @@
         android:paddingTop="12dp"
         android:paddingBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_match_suggestions_header"
-        tools:listitem="@layout/item_match_suggestion" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_other_matches_label"
+        tools:listitem="@layout/item_match_card" />
+
+    <TextView
+        android:id="@+id/tv_other_matches_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="20dp"
+        android:text="@string/match_other_compatible_matches"
+        android:textColor="#616161"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_match_suggestions_header" />
 
     <LinearLayout
         android:id="@+id/layout_match_suggestions_empty"

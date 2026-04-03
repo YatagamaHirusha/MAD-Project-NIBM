@@ -15,7 +15,7 @@
         android:theme="@style/Theme.Cw">
 
         <activity
-            android:name=".Splash"
+            android:name=".welcome.Splash"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,10 +24,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Questionnaire"
+            android:name=".assessment.Questionnaire"
             android:exported="false" />
         <activity
-            android:name=".Welcome"
+            android:name=".welcome.Welcome"
             android:exported="false" />
         <activity
             android:name=".auth.register"
@@ -36,7 +36,7 @@
             android:name=".auth.login"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".shell.MainActivity"
             android:exported="false" />
     </application>
 

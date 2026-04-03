@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
+    android:layout_marginBottom="14dp"
     app:cardBackgroundColor="#FFFFFF"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="1dp"
-    app:strokeColor="#F0F0F0"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="2dp"
+    app:strokeColor="#ECECEC"
     app:strokeWidth="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,36 +16,47 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <FrameLayout
-            android:id="@+id/fl_match_avatar"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+        <ImageView
+            android:id="@+id/iv_match_photo"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/iv_match_photo"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="@null"
-                android:scaleType="centerCrop" />
+        <TextView
+            android:id="@+id/tv_match_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-6dp"
+            android:layout_marginTop="-6dp"
+            android:background="@drawable/bg_avatar_circle"
+            android:gravity="center"
+            android:minWidth="24dp"
+            android:minHeight="24dp"
+            android:paddingHorizontal="6dp"
+            android:textColor="#E91E63"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/iv_match_photo"
+            app:layout_constraintTop_toTopOf="@id/iv_match_photo"
+            tools:text="1" />
 
-            <TextView
-                android:id="@+id/tv_match_rank"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top|start"
-                android:layout_margin="4dp"
-                android:background="@drawable/bg_avatar_circle"
-                android:gravity="center"
-                android:minWidth="22dp"
-                android:minHeight="22dp"
-                android:paddingHorizontal="6dp"
-                android:textColor="#E91E63"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                tools:text="1" />
-        </FrameLayout>
+        <TextView
+            android:id="@+id/tv_match_pending_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_chip_done"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp"
+            android:text="@string/match_pending_response"
+            android:textColor="#2E7D32"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_match_name"
@@ -54,13 +65,13 @@
             android:layout_marginStart="12dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="#1A1A1A"
+            android:textColor="#111111"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/tv_match_percent"
-            app:layout_constraintStart_toEndOf="@+id/fl_match_avatar"
-            app:layout_constraintTop_toTopOf="@+id/fl_match_avatar"
-            tools:text="Alex Perera" />
+            app:layout_constraintStart_toEndOf="@id/iv_match_photo"
+            app:layout_constraintTop_toTopOf="@id/iv_match_photo"
+            tools:text="Nethmi Bandara" />
 
         <TextView
             android:id="@+id/tv_match_percent"
@@ -73,8 +84,8 @@
             android:textSize="13sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/fl_match_avatar"
-            tools:text="88% match" />
+            app:layout_constraintTop_toTopOf="@+id/tv_match_name"
+            tools:text="91% match" />
 
         <TextView
             android:id="@+id/tv_match_location_line"
@@ -85,9 +96,9 @@
             android:textColor="#757575"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/fl_match_avatar"
+            app:layout_constraintStart_toEndOf="@id/iv_match_photo"
             app:layout_constraintTop_toBottomOf="@+id/tv_match_name"
-            tools:text="Colombo · Software Developer" />
+            tools:text="Colombo · Teacher" />
 
         <TextView
             android:id="@+id/tv_match_ecr"
@@ -98,43 +109,38 @@
             android:textColor="#9E9E9E"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/fl_match_avatar"
+            app:layout_constraintStart_toEndOf="@id/iv_match_photo"
             app:layout_constraintTop_toBottomOf="@+id/tv_match_location_line"
-            tools:text="ECR-RS · Anxiety 3.2 · Avoidance 4.1 (1–7)" />
+            tools:text="ECR-RS · Anxiety 3.8 · Avoidance 3.2 (1–7)" />
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/progress_match_strength"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="14dp"
             android:max="100"
             app:indicatorColor="#E91E63"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/fl_match_avatar"
-            app:layout_constraintTop_toBottomOf="@+id/tv_match_ecr"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_match_photo"
             app:trackColor="#FCE4EC"
             app:trackCornerRadius="4dp"
             app:trackThickness="6dp"
-            tools:progress="88" />
+            tools:progress="91" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_match_send_request"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="0dp"
             android:layout_height="48dp"
-            android:layout_marginStart="12dp"
             android:layout_marginTop="14dp"
             android:text="@string/match_request_send"
             android:textAllCaps="false"
-            android:textColor="#E91E63"
             android:textSize="15sp"
+            app:backgroundTint="#E91E63"
             app:cornerRadius="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/fl_match_avatar"
-            app:layout_constraintTop_toBottomOf="@+id/progress_match_strength"
-            app:strokeColor="#E91E63"
-            app:strokeWidth="2dp" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progress_match_strength" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -18,6 +18,14 @@
     <string name="match_suggestions_empty_title">No matches in this run</string>
     <string name="match_suggestions_empty_body">Try a different city in Profile or Interests, or widen who you are open to meeting. Demo profiles only cover selected areas.</string>
     <string name="match_suggestion_say_hello">Say hello</string>
+    <string name="match_request_send">Send request</string>
+    <string name="match_request_sent">Request sent</string>
+    <string name="match_request_already_pending">You already sent a match request. Wait for a response before sending another.</string>
+    <string name="match_request_demo_saved">Request saved on this device. Demo profiles are not linked to real accounts.</string>
+    <string name="match_request_sent_server">Match request sent.</string>
+    <string name="match_request_failed">Could not send request.</string>
+    <string name="match_pending_response">Pending response</string>
+    <string name="match_other_compatible_matches">Other Compatible Matches</string>
     <string name="match_percent_label">%1$d%% match</string>
     <string name="match_line_location_job">%1$s · %2$s</string>
     <string name="inbox_subtitle">Conversations with people you have matched with.</string>
@@ -72,4 +80,10 @@
     <string name="profile_save_failed">Could not save profile.</string>
     <string name="profile_saved">Profile saved</string>
     <string name="profile_not_signed_in">Sign in to sync your profile.</string>
+    <string name="cd_profile_photo">Profile photo</string>
+    <string name="profile_change_photo">Change photo</string>
+    <string name="profile_photo_saved">Photo updated</string>
+    <string name="profile_photo_saved_cloud">Photo saved to your account</string>
+    <string name="profile_photo_save_failed">Could not save that photo. Try another image.</string>
+    <string name="profile_photo_cloud_failed">Photo saved on this device only. Cloud upload failed: %1$s</string>
 </resources>

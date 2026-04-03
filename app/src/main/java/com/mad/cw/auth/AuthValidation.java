@@ -4,6 +4,14 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.util.Patterns;
 import android.widget.EditText;
+import com.mad.cw.assessment.*;
+import com.mad.cw.chat.*;
+import com.mad.cw.inbox.*;
+import com.mad.cw.interests.*;
+import com.mad.cw.matching.*;
+import com.mad.cw.profile.*;
+import com.mad.cw.shell.*;
+import com.mad.cw.welcome.*;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -50,7 +58,10 @@ public final class AuthValidation {
         return password != null && password.length() >= MIN_PASSWORD_LENGTH;
     }
 
-    /** Parses {@link #DOB_PATTERN}; returns null if missing or invalid (including impossible dates). */
+    /**
+     * Parses {@link #DOB_PATTERN} first, then common server formats (e.g. ISO {@code yyyy-MM-dd} from
+     * Postgres/Supabase). Returns null if missing or invalid.
+     */
     @Nullable
     public static Calendar parseDob(@Nullable String dobText) {
         if (dobText == null) {
@@ -67,8 +78,45 @@ public final class AuthValidation {
             trimToDateStart(cal);
             return cal;
         } catch (ParseException e) {
-            return null;
+            return parseDobIsoOrNull(s);
         }
+    }
+
+    @Nullable
+    private static Calendar parseDobIsoOrNull(String s) {
+        try {
+            if (s.length() >= 10 && s.charAt(4) == '-') {
+                String datePart = s.substring(0, 10);
+                SimpleDateFormat iso = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                iso.setLenient(false);
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(iso.parse(datePart));
+                trimToDateStart(cal);
+                return cal;
+            }
+        } catch (ParseException ignored) {
+        }
+        return null;
+    }
+
+    /**
+     * Normalizes any supported DOB string to {@link #DOB_PATTERN} for form fields. If parsing fails, returns the
+     * trimmed original so the user still sees server text.
+     */
+    @NonNull
+    public static String formatDobForDisplay(@Nullable String raw) {
+        if (raw == null) {
+            return "";
+        }
+        String s = raw.trim();
+        if (s.isEmpty()) {
+            return "";
+        }
+        Calendar c = parseDob(s);
+        if (c != null) {
+            return newDobFormat().format(c.getTime());
+        }
+        return s;
     }
 
     private static void trimToDateStart(Calendar cal) {

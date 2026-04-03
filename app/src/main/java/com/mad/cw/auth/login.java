@@ -6,17 +6,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.mad.cw.assessment.*;
+import com.mad.cw.chat.*;
+import com.mad.cw.inbox.*;
+import com.mad.cw.interests.*;
+import com.mad.cw.matching.*;
+import com.mad.cw.profile.*;
+import com.mad.cw.shell.*;
+import com.mad.cw.welcome.*;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.mad.cw.MainActivity;
-import com.mad.cw.ProfilePreferences;
+import com.mad.cw.shell.AccountSync;
+import com.mad.cw.shell.MainActivity;
 import com.mad.cw.R;
-import com.mad.cw.supabase.ProfileRemoteRepository;
-import com.mad.cw.supabase.SessionStore;
-import com.mad.cw.supabase.SupabaseAuthApi;
-import com.mad.cw.supabase.SupabaseRestClient;
+import com.mad.cw.supabase.auth.SupabaseAuthApi;
+import com.mad.cw.supabase.core.SessionStore;
+import com.mad.cw.supabase.core.SupabaseRestClient;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -73,13 +80,7 @@ public class login extends AppCompatActivity {
                     if (res.success) {
                         SessionStore.saveSession(
                                 res.accessToken, res.refreshToken, res.expiresInSeconds, res.userId);
-                        try {
-                            ProfileRemoteRepository.FetchedProfile fetched =
-                                    ProfileRemoteRepository.fetchMyProfile();
-                            ProfilePreferences.copyFromRecord(login.this, fetched.record);
-                        } catch (Exception ignored) {
-                            // Dashboard / Profile will retry fetch.
-                        }
+                        AccountSync.syncFromServer(login.this.getApplicationContext());
                     }
                     safePost(() -> {
                         btnLogin.setEnabled(true);

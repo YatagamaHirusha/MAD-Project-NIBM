@@ -1,24 +1,34 @@
 package com.mad.cw.auth;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.mad.cw.assessment.*;
+import com.mad.cw.chat.*;
+import com.mad.cw.inbox.*;
+import com.mad.cw.interests.*;
+import com.mad.cw.matching.*;
+import com.mad.cw.profile.*;
+import com.mad.cw.shell.*;
+import com.mad.cw.welcome.*;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.mad.cw.GenderOptions;
-import com.mad.cw.MainActivity;
-import com.mad.cw.ProfilePreferences;
+import com.mad.cw.shell.AccountSync;
+import com.mad.cw.profile.GenderOptions;
+import com.mad.cw.shell.MainActivity;
+import com.mad.cw.profile.ProfilePreferences;
 import com.mad.cw.R;
-import com.mad.cw.supabase.ProfileRemoteRepository;
-import com.mad.cw.supabase.SessionStore;
-import com.mad.cw.supabase.SupabaseAuthApi;
-import com.mad.cw.supabase.SupabaseRestClient;
+import com.mad.cw.supabase.auth.SupabaseAuthApi;
+import com.mad.cw.supabase.core.SessionStore;
+import com.mad.cw.supabase.core.SupabaseRestClient;
+import com.mad.cw.supabase.repositories.ProfileRemoteRepository;
 
 import java.util.Calendar;
 import java.util.concurrent.ExecutorService;
@@ -115,13 +125,10 @@ public class register extends AppCompatActivity {
                         } catch (Exception e) {
                             profileSyncError = e.getMessage() != null ? e.getMessage() : e.toString();
                         }
-                        try {
-                            ProfileRemoteRepository.FetchedProfile fetched =
-                                    ProfileRemoteRepository.fetchMyProfile();
-                            ProfilePreferences.copyFromRecord(register.this, fetched.record);
-                        } catch (Exception ignored) {
-                            ProfilePreferences.get(register.this)
-                                    .edit()
+                        AccountSync.syncFromServer(register.this.getApplicationContext());
+                        SharedPreferences p = ProfilePreferences.get(register.this);
+                        if (p.getString(ProfilePreferences.KEY_DISPLAY_NAME, "").trim().isEmpty()) {
+                            p.edit()
                                     .putString(ProfilePreferences.KEY_DISPLAY_NAME, name)
                                     .putString(ProfilePreferences.KEY_EMAIL, email)
                                     .putString(ProfilePreferences.KEY_DOB, dobStr)
