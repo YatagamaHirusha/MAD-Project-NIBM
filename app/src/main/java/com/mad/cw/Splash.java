@@ -7,9 +7,8 @@ import android.os.Looper;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.mad.cw.supabase.SessionStore;
 
 public class Splash extends AppCompatActivity {
 
@@ -19,25 +18,14 @@ public class Splash extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_splash);
 
-        // we can use sharedPreference to save states of the user and check if the user is logged in or not.
-        // for now, we will just use a boolean variable to check if the user is logged in or not.
-        boolean isLoggedIn = false;
+        SessionStore.init(this);
 
-        if(isLoggedIn){
-            Intent intent = new Intent(Splash.this, Welcome.class);
-            startActivity(intent);
+        // Same delay for everyone: a sub-second splash is easy to miss during cold start.
+        long splashMs = 2000L;
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            Class<?> next = SessionStore.isLoggedIn() ? MainActivity.class : Welcome.class;
+            startActivity(new Intent(Splash.this, next));
             finish();
-        }
-        else {
-            long splashTime = 4500L;
-            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(Splash.this, Welcome.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }, splashTime);
-        }
+        }, splashMs);
     }
 }

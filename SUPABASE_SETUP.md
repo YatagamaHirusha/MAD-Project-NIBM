@@ -26,11 +26,11 @@ Use **`SupabaseRestClient.getInstance()`** for OkHttp calls to `.../rest/v1/<tab
 
 Without RLS, anyone with the anon key could read or write all rows exposed through the API.
 
-## 4. Database shape
+## 4. Create remote tables
 
-Implement tables that match **`DATABASE_ARCHITECTURE.md`** (e.g. `profiles`, `user_ecr_assessments`, `user_interests`, `swipes`, `conversations`, `messages`).  
+**Step-by-step:** follow **`sql/SUPABASE_RUN_GUIDE.md`** (dashboard → SQL Editor → paste → run → verify).
 
-A starter SQL file is in **`sql/supabase_initial_schema.sql`** — adjust before running in **SQL Editor** in the Supabase dashboard.
+The full script is **`sql/supabase_initial_schema.sql`** (profiles, ECR, interests, swipes, conversations, messages + RLS + grants).
 
 ## 5. Auth
 
@@ -47,3 +47,25 @@ Today’s `SupabaseRestClient` only attaches the **anon** key. When you wire log
 
 - **Official Supabase Kotlin SDK** — if you add Kotlin to the app module.
 - **Edge Functions** — for match scoring / calling your ML service with secrets server-side.
+
+## 7. Implemented in the Android app (after DB migration)
+
+- **`INTERNET`** permission in the manifest.
+- **`SessionStore`** — saves access/refresh tokens and user id after sign-up / sign-in.
+- **`SupabaseAuthApi`** — email + password `signup` and `token?grant_type=password`.
+- **`SupabaseRestClient`** — sends **`Authorization: Bearer <user JWT>`** when a session exists, otherwise the anon key.
+- **`ProfileRemoteRepository.upsertMyProfile`** — creates/merges `public.profiles` on **register** (`current_status = looking_for_partner`).
+- **`Splash` / `Welcome`** — if `SessionStore.isLoggedIn()`, open **`MainActivity`** directly.
+
+### Supabase dashboard checklist for smooth auth
+
+1. **Authentication → Providers → Email** — enabled.
+2. If sign-up returns “check your email” and no session: **Authentication → Providers → Email → Confirm email** — turn **off** for class demos, or handle confirmation in-app.
+
+### Suggested next implementation steps
+
+1. **Refresh tokens** — when `SessionStore.getAccessToken()` is expired, call `auth/v1/token?grant_type=refresh_token` and save a new access token.
+2. **Sync local prefs** — push `ProfilePreferences`, `AssessmentPreferences`, `UserInterestStore` to Supabase after login (and pull on cold start).
+3. **Find partner** — Edge Function (service role) runs ML, writes `match_suggestion_batches`, app reads candidates.
+4. **Match requests + RPC** — wire `match_requests` insert and `accept_match_request` / `decline_match_request` from the UI.
+5. **Logout** — `SessionStore.clear()` + return to `Welcome` (e.g. from Profile).

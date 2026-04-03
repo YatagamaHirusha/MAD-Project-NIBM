@@ -84,4 +84,22 @@ public final class UserInterestStore {
     public static boolean hasSavedProfile(Context context) {
         return prefs(context).contains(KEY_LOCATION) && prefs(context).contains(KEY_OCCUPATION);
     }
+
+    /**
+     * True when location, occupation, and at least one interest per taxonomy category are saved
+     * (same rules as LifestyleFragment submit).
+     */
+    public static boolean isLifestyleComplete(Context context) {
+        if (loadLocation(context).trim().isEmpty() || loadOccupation(context).trim().isEmpty()) {
+            return false;
+        }
+        Map<String, List<String>> map = loadInterestMap(context);
+        for (InterestTaxonomy.Category cat : InterestTaxonomy.CATEGORIES) {
+            List<String> list = map.get(cat.columnName);
+            if (list == null || list.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

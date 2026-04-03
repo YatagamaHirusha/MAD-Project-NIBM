@@ -38,11 +38,14 @@ public final class SupabaseRestClient {
             final String anon = key;
             Interceptor auth = chain -> {
                 Request original = chain.request();
-                Request next = original.newBuilder()
-                        .header("apikey", anon)
-                        .header("Authorization", "Bearer " + anon)
-                        .build();
-                return chain.proceed(next);
+                Request.Builder b = original.newBuilder().header("apikey", anon);
+                String existingAuth = original.header("Authorization");
+                if (existingAuth != null && !existingAuth.isEmpty()) {
+                    return chain.proceed(b.build());
+                }
+                String userJwt = SessionStore.getAccessToken();
+                String bearer = (userJwt != null && !userJwt.isEmpty()) ? userJwt : anon;
+                return chain.proceed(b.header("Authorization", "Bearer " + bearer).build());
             };
             builder.addInterceptor(auth);
         }

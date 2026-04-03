@@ -105,7 +105,7 @@
                             android:id="@+id/tv_readiness_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="35%"
+                            android:text="0%"
                             android:textColor="#E91E63"
                             android:textSize="28sp"
                             android:textStyle="bold" />
@@ -126,7 +126,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:max="100"
-                        android:progress="35"
+                        android:progress="0"
                         app:indicatorColor="#E91E63"
                         app:trackColor="#FCE4EC"
                         app:trackCornerRadius="4dp"
@@ -161,56 +161,84 @@
                     android:orientation="vertical"
                     android:showDividers="middle">
 
-                    <!-- Step 1: done -->
-                    <LinearLayout
+                    <!-- Step 1: basic profile -->
+                    <FrameLayout
+                        android:id="@+id/card_module_basic"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingHorizontal="16dp"
-                        android:paddingVertical="16dp">
-
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ic_step_done" />
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true">
 
                         <LinearLayout
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="14dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="16dp">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Basic preferences"
-                                android:textColor="#1A1A1A"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
+                            <ImageView
+                                android:id="@+id/iv_basic_step_icon"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:contentDescription="@null"
+                                android:padding="4dp"
+                                android:src="@drawable/ic_step_done" />
 
-                            <TextView
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp"
-                                android:text="Account details you added at signup"
-                                android:textColor="#757575"
-                                android:textSize="13sp" />
+                                android:layout_marginStart="14dp"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Basic profile"
+                                    android:textColor="#1A1A1A"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tv_basic_step_subtitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:text="Name, contact, and preferences"
+                                    android:textColor="#757575"
+                                    android:textSize="13sp" />
+                            </LinearLayout>
+
+                            <FrameLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <ImageView
+                                    android:id="@+id/iv_basic_chevron"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:contentDescription="@null"
+                                    android:src="@drawable/ic_chevron_end"
+                                    app:tint="#BDBDBD" />
+
+                                <TextView
+                                    android:id="@+id/tv_basic_done"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical|end"
+                                    android:background="@drawable/bg_chip_done"
+                                    android:paddingHorizontal="10dp"
+                                    android:paddingVertical="4dp"
+                                    android:text="@string/dashboard_ecr_done"
+                                    android:textColor="#2E7D32"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"
+                                    android:visibility="gone" />
+                            </FrameLayout>
                         </LinearLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/bg_chip_done"
-                            android:paddingHorizontal="10dp"
-                            android:paddingVertical="4dp"
-                            android:text="Done"
-                            android:textColor="#2E7D32"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
+                    </FrameLayout>
 
                     <!-- Step 2: psychology — primary action -->
                     <FrameLayout
@@ -230,6 +258,7 @@
                             android:paddingVertical="16dp">
 
                             <ImageView
+                                android:id="@+id/iv_psychology_step_icon"
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
                                 android:contentDescription="@null"
@@ -260,16 +289,36 @@
                                     android:textSize="13sp" />
                             </LinearLayout>
 
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:contentDescription="@null"
-                                android:src="@drawable/ic_chevron_end"
-                                app:tint="#BDBDBD" />
+                            <FrameLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <ImageView
+                                    android:id="@+id/iv_psychology_chevron"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:contentDescription="@null"
+                                    android:src="@drawable/ic_chevron_end"
+                                    app:tint="#BDBDBD" />
+
+                                <TextView
+                                    android:id="@+id/tv_psychology_done"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical|end"
+                                    android:background="@drawable/bg_chip_done"
+                                    android:paddingHorizontal="10dp"
+                                    android:paddingVertical="4dp"
+                                    android:text="@string/dashboard_ecr_done"
+                                    android:textColor="#2E7D32"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"
+                                    android:visibility="gone" />
+                            </FrameLayout>
                         </LinearLayout>
                     </FrameLayout>
 
-                    <!-- Step 3: interests — secondary / locked look -->
+                    <!-- Step 3: interests -->
                     <FrameLayout
                         android:id="@+id/card_module_interests"
                         android:layout_width="match_parent"
@@ -279,15 +328,16 @@
                         android:focusable="true">
 
                         <LinearLayout
+                            android:id="@+id/ll_interests_row"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:alpha="0.85"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
                             android:paddingHorizontal="16dp"
                             android:paddingVertical="16dp">
 
                             <ImageView
+                                android:id="@+id/iv_interests_step_icon"
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
                                 android:contentDescription="@null"
@@ -303,6 +353,7 @@
                                 android:orientation="vertical">
 
                                 <TextView
+                                    android:id="@+id/tv_interests_title"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="Interests &amp; lifestyle"
@@ -311,6 +362,7 @@
                                     android:textStyle="bold" />
 
                                 <TextView
+                                    android:id="@+id/tv_interests_subtitle"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="2dp"
@@ -319,27 +371,59 @@
                                     android:textSize="13sp" />
                             </LinearLayout>
 
-                            <TextView
+                            <FrameLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/bg_chip_locked"
-                                android:paddingHorizontal="10dp"
-                                android:paddingVertical="4dp"
-                                android:text="Next"
-                                android:textColor="#757575"
-                                android:textSize="12sp"
-                                android:textStyle="bold" />
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/tv_interests_locked"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical|end"
+                                    android:background="@drawable/bg_chip_locked"
+                                    android:paddingHorizontal="10dp"
+                                    android:paddingVertical="4dp"
+                                    android:text="@string/dashboard_step_locked"
+                                    android:textColor="#757575"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold" />
+
+                                <ImageView
+                                    android:id="@+id/iv_interests_chevron"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:layout_gravity="center_vertical|end"
+                                    android:contentDescription="@null"
+                                    android:src="@drawable/ic_chevron_end"
+                                    android:visibility="gone"
+                                    app:tint="#BDBDBD" />
+
+                                <TextView
+                                    android:id="@+id/tv_interests_done"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical|end"
+                                    android:background="@drawable/bg_chip_done"
+                                    android:paddingHorizontal="10dp"
+                                    android:paddingVertical="4dp"
+                                    android:text="@string/dashboard_ecr_done"
+                                    android:textColor="#2E7D32"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"
+                                    android:visibility="gone" />
+                            </FrameLayout>
                         </LinearLayout>
                     </FrameLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <TextView
+                android:id="@+id/tv_dashboard_footer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:gravity="center"
-                android:text="Complete all steps to unlock matching."
+                android:text="@string/dashboard_footer_progress"
                 android:textColor="#9E9E9E"
                 android:textSize="13sp" />
 

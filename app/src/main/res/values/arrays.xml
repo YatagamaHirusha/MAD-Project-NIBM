@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="gender_labels">
+        <item>Woman</item>
+        <item>Man</item>
+        <item>Non-binary</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="gender_values">
+        <item>female</item>
+        <item>male</item>
+        <item>non_binary</item>
+        <item>other</item>
+    </string-array>
+    <string-array name="target_gender_labels">
+        <item>Women</item>
+        <item>Men</item>
+        <item>Non-binary people</item>
+        <item>Everyone</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="target_gender_values">
+        <item>female</item>
+        <item>male</item>
+        <item>non_binary</item>
+        <item>any</item>
+        <item>other</item>
+    </string-array>
+</resources>

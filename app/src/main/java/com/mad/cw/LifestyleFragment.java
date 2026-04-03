@@ -1,13 +1,13 @@
 package com.mad.cw;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,16 +16,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.mad.cw.supabase.SessionStore;
+import com.mad.cw.supabase.SupabaseRestClient;
+import com.mad.cw.supabase.UserInterestsRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 
 public class LifestyleFragment extends Fragment {
 
@@ -33,10 +40,10 @@ public class LifestyleFragment extends Fragment {
     private static final int SECTION_TITLE_MARGIN_BOTTOM_DP = 6;
     private static final int CHIP_GROUP_MARGIN_BOTTOM_DP = 8;
 
-    private final String[] LOCATIONS_POOL = {"Colombo", "Gampaha", "Kalutara", "Galle", "Matara", "Hambantota", "Ratnapura", "Kegalle", "Badulla", "Monaragala", "Kandy"};
-    private final String[] OCCUPATIONS_POOL = {"Engineer", "Doctor", "Teacher", "Lawyer", "Accountant", "Bank Officer", "Software Developer", "Civil Servant", "Farmer", "Business Owner", "Marketing Executive", "Student", "Nurse", "Tourism Guide", "Driver", "Chef", "Police Officer", "Electrician", "Construction Worker", "Journalist", "Pharmacist"};
-
     private final Map<String, ChipGroup> chipGroupsByColumn = new HashMap<>();
+
+    private ExecutorService io;
+    private volatile boolean viewDestroyed;
 
     public LifestyleFragment() {}
 
@@ -49,24 +56,40 @@ public class LifestyleFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        viewDestroyed = false;
+        io = Executors.newSingleThreadExecutor();
 
-        AutoCompleteTextView dropdownLocation = view.findViewById(R.id.dropdown_location);
-        AutoCompleteTextView dropdownOccupation = view.findViewById(R.id.dropdown_occupation);
         LinearLayout sections = view.findViewById(R.id.ll_interest_sections);
         MaterialButton btnSubmit = view.findViewById(R.id.btn_submit_profile);
-
-        ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, LOCATIONS_POOL);
-        dropdownLocation.setAdapter(locationAdapter);
-        ArrayAdapter<String> occupationAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, OCCUPATIONS_POOL);
-        dropdownOccupation.setAdapter(occupationAdapter);
-
-        dropdownLocation.setText(UserInterestStore.loadLocation(requireContext()), false);
-        dropdownOccupation.setText(UserInterestStore.loadOccupation(requireContext()), false);
 
         buildInterestSections(sections);
         restoreChipSelections();
 
-        btnSubmit.setOnClickListener(v -> submitProfile(dropdownLocation, dropdownOccupation));
+        btnSubmit.setOnClickListener(v -> submitProfile());
+    }
+
+    @Override
+    public void onDestroyView() {
+        viewDestroyed = true;
+        if (io != null) {
+            io.shutdown();
+            io = null;
+        }
+        super.onDestroyView();
+    }
+
+    private void safePost(Runnable action) {
+        FragmentActivity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
+        activity.runOnUiThread(
+                () -> {
+                    if (viewDestroyed || !isAdded()) {
+                        return;
+                    }
+                    action.run();
+                });
     }
 
     private void buildInterestSections(LinearLayout container) {
@@ -154,12 +177,19 @@ public class LifestyleFragment extends Fragment {
         }
     }
 
-    private void submitProfile(AutoCompleteTextView dropdownLocation, AutoCompleteTextView dropdownOccupation) {
-        String location = dropdownLocation.getText() != null ? dropdownLocation.getText().toString().trim() : "";
-        String occupation = dropdownOccupation.getText() != null ? dropdownOccupation.getText().toString().trim() : "";
+    private void submitProfile() {
+        Context ctx = requireContext();
+        SharedPreferences p = ProfilePreferences.get(ctx);
+        String location =
+                LocationOccupationOptions.canonicalLocation(
+                        p.getString(ProfilePreferences.KEY_LOCATION, ""));
+        String occupation =
+                LocationOccupationOptions.canonicalOccupation(
+                        p.getString(ProfilePreferences.KEY_OCCUPATION, ""));
 
-        if (location.isEmpty() || occupation.isEmpty()) {
-            Toast.makeText(getContext(), R.string.lifestyle_need_location_occupation, Toast.LENGTH_SHORT).show();
+        if (location.length() < ProfileFormValidator.MIN_LOCATION_LENGTH
+                || occupation.length() < ProfileFormValidator.MIN_OCCUPATION_LENGTH) {
+            Toast.makeText(ctx, R.string.lifestyle_need_profile_location_occupation, Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -174,15 +204,68 @@ public class LifestyleFragment extends Fragment {
             interests.put(cat.columnName, selected);
         }
 
-        UserInterestStore.save(requireContext(), location, occupation, interests);
+        UserInterestStore.save(ctx, location, occupation, interests);
 
-        Toast.makeText(getContext(), R.string.lifestyle_saved, Toast.LENGTH_SHORT).show();
+        if (!SupabaseRestClient.isConfigured() || !SessionStore.isLoggedIn()) {
+            Toast.makeText(ctx, R.string.lifestyle_saved, Toast.LENGTH_SHORT).show();
+            goToHubDashboard();
+            return;
+        }
 
-        requireActivity().getSupportFragmentManager()
+        MaterialButton btn = requireActivity().findViewById(R.id.btn_submit_profile);
+        if (btn != null) {
+            btn.setEnabled(false);
+        }
+        try {
+            io.execute(
+                    () -> {
+                        Exception err = null;
+                        try {
+                            UserInterestsRepository.upsertFromLocal(ctx.getApplicationContext());
+                        } catch (Exception e) {
+                            err = e;
+                        }
+                        final Exception syncErr = err;
+                        safePost(
+                                () -> {
+                                    if (btn != null) {
+                                        btn.setEnabled(true);
+                                    }
+                                    if (syncErr != null) {
+                                        String msg =
+                                                syncErr.getMessage() != null
+                                                        ? syncErr.getMessage()
+                                                        : syncErr.toString();
+                                        Toast.makeText(
+                                                        requireContext(),
+                                                        getString(R.string.lifestyle_sync_failed, msg),
+                                                        Toast.LENGTH_LONG)
+                                                .show();
+                                    } else {
+                                        Toast.makeText(
+                                                        requireContext(),
+                                                        R.string.lifestyle_saved_synced,
+                                                        Toast.LENGTH_SHORT)
+                                                .show();
+                                    }
+                                    goToHubDashboard();
+                                });
+                    });
+        } catch (RejectedExecutionException e) {
+            if (btn != null) {
+                btn.setEnabled(true);
+            }
+            Toast.makeText(ctx, R.string.lifestyle_saved, Toast.LENGTH_SHORT).show();
+            goToHubDashboard();
+        }
+    }
+
+    private void goToHubDashboard() {
+        requireActivity()
+                .getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, new DashboardFragment())
                 .commit();
-
         BottomNavigationView bottomNav = requireActivity().findViewById(R.id.bottom_navigation);
         if (bottomNav != null) {
             bottomNav.setSelectedItemId(R.id.nav_hub);

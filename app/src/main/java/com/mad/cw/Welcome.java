@@ -4,14 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.mad.cw.MainActivity;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.mad.cw.auth.login;
 import com.mad.cw.auth.register;
+import com.mad.cw.supabase.SessionStore;
 
 public class Welcome extends AppCompatActivity {
 
@@ -19,6 +19,12 @@ public class Welcome extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        SessionStore.init(this);
+        if (SessionStore.isLoggedIn()) {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+            return;
+        }
         setContentView(R.layout.activity_welcome);
 
         Button btnLogin = findViewById(R.id.btnLogin);

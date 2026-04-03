@@ -143,13 +143,33 @@ Option B — **normalized tags**:
 
 Option B is better for analytics; Option A matches the CSV one-to-one and is faster to dump to Parquet for batch jobs.
 
-**`matches` / `swipes`** (depending on product rules)
+**`match_requests`** (MatchMind: request / accept / decline — not Tinder-style swipes)
 
 - `id` — PK  
-- `user_id`, `target_user_id`  
-- `action` — enum: `like`, `pass`, `superlike`, …  
-- `created_at`  
-- Optional: `model_score`, `feature_snapshot_id` for debugging ML  
+- `from_user_id`, `to_user_id`  
+- `status` — `pending` | `accepted` | `declined` | `cancelled_by_sender`  
+- `suggestion_batch_id` — optional FK to ML batch  
+- `ml_rank` — optional 1–5  
+- At most **one** `pending` outbound request per sender (partial unique index)  
+
+**`match_suggestion_batches`** (optional audit / RL features)
+
+- `seeker_id`, `candidate_user_ids` (array, max 5), `model_scores`, `model_version`  
+
+**`relationships`**
+
+- Created when a request is **accepted** (via RPC); `feedback_due_at` = `started_at` + 3 days  
+- `status` — `active` | `feedback_complete` | `ended`  
+
+**`match_feedback`**
+
+- One row per participant per relationship; `rating`, `comment`, optional `reward_signal` for RL  
+
+**`profiles.current_status`**
+
+- `looking_for_partner` — eligible for ML recommendations  
+- `dating` — matched; `active_partner_id` set  
+- `found_love` — off the market for recommendations  
 
 **`conversations`**
 
@@ -182,7 +202,9 @@ erDiagram
     users ||--|| user_profiles : has
     users ||--o| user_ecr_assessments : completes
     users ||--|| user_interests : has
-    users ||--o{ swipes : sends
+    users ||--o{ match_requests : sends_or_receives
+    users ||--o{ relationships : in_match
+    relationships ||--o{ match_feedback : gives
     users ||--o{ conversations : participates
     conversations ||--o{ messages : contains
 ```
