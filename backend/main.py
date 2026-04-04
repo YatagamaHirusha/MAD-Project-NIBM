@@ -50,6 +50,8 @@ class Settings(BaseSettings):
     hybrid_alpha_override: Optional[float] = None
     # Load .pth during lifespan. Set false on slow hosts so the server binds $PORT before PyTorch init (Render).
     eager_model_load: bool = Field(default=True)
+    # Optional debug endpoint guard for non-shell environments (Render free tier).
+    debug_token: Optional[str] = None
 
 
 settings = Settings()
@@ -319,6 +321,52 @@ async def root():
 @app.get("/health")
 async def health():
     return {"ok": True}
+
+
+@app.get("/debug/profile/{user_id}")
+async def debug_profile_lookup(user_id: str, request: Request, token: str = ""):
+    """Temporary diagnostics endpoint. Enable by setting DEBUG_TOKEN in env."""
+    if not settings.debug_token:
+        raise HTTPException(status_code=404, detail="Debug endpoint disabled")
+    if token != settings.debug_token:
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    supabase: Client = request.app.state.supabase
+
+    def _run():
+        profile_resp = (
+            supabase.table("profiles")
+            .select("id,email,current_status,gender,target_gender,location")
+            .eq("id", user_id)
+            .limit(1)
+            .execute()
+        )
+        ecr_resp = (
+            supabase.table("user_ecr_assessments")
+            .select("user_id,completed_at")
+            .eq("user_id", user_id)
+            .order("completed_at", desc=True)
+            .limit(1)
+            .execute()
+        )
+        interests_resp = (
+            supabase.table("user_interests")
+            .select("user_id,location,occupation")
+            .eq("user_id", user_id)
+            .limit(1)
+            .execute()
+        )
+        return profile_resp.data or [], ecr_resp.data or [], interests_resp.data or []
+
+    profile_rows, ecr_rows, interest_rows = await asyncio.to_thread(_run)
+    return {
+        "supabase_url": settings.supabase_url,
+        "user_id": user_id,
+        "profile_found": len(profile_rows) > 0,
+        "ecr_found": len(ecr_rows) > 0,
+        "interests_found": len(interest_rows) > 0,
+        "profile": profile_rows[0] if profile_rows else None,
+    }
 
 
 @app.get("/get_matches/{user_id}", response_model=GetMatchesResponse)
