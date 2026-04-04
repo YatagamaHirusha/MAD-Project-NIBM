@@ -1,27 +1,18 @@
-# IDE / Editor
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+# Android Studio
 .idea/
 *.iml
-*.ipr
-*.iws
-.project
-.settings/
-.classpath
-
-# Build and Output
-build/
-/build
-/*/build
-.gradle/
-captures/
-.externalNativeBuild/
-.cxx/
-
-# Local configuration
-local.properties
-
-# OS Generated
-.DS_Store
-Thumbs.db
-
-# Secrets
-google-services.json

@@ -31,12 +31,6 @@
             android:name=".welcome.Welcome"
             android:exported="false" />
         <activity
-            android:name=".Welcome"
-            android:exported="false" />
-        <activity
-            android:name=".Dashboard"
-            android:exported="false" />
-        <activity
             android:name=".auth.register"
             android:exported="false" />
         <activity
