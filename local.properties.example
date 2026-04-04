@@ -1,7 +1,0 @@
-# Copy these lines into `local.properties` (same folder as this file).
-# `local.properties` is gitignored — do not commit real keys.
-#
-# Supabase: Project Settings → API → Project URL and anon public key
-
-supabase.url=https://YOUR_PROJECT_REF.supabase.co
-supabase.anon.key=YOUR_SUPABASE_ANON_KEY
