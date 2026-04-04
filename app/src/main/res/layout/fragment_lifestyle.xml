@@ -4,137 +4,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="#FAFAFA"
     android:fillViewport="true">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="24dp">
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="32dp">
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="About You"
-            android:textColor="#333333"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/menu_location"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:hint="Current Location"
-            app:boxStrokeColor="#E91E63"
-            app:layout_constraintTop_toBottomOf="@+id/tv_title">
-
-            <AutoCompleteTextView
-                android:id="@+id/dropdown_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="none" /> </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/menu_occupation"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="Occupation"
-            app:boxStrokeColor="#E91E63"
-            app:layout_constraintTop_toBottomOf="@+id/menu_location">
-
-            <AutoCompleteTextView
-                android:id="@+id/dropdown_occupation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="none" />
-        </com.google.android.material.textfield.TextInputLayout>
+            android:text="Interests &amp; lifestyle"
+            android:textColor="#1A1A1A"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tv_intent_label"
+            android:id="@+id/tv_subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/lifestyle_subtitle"
+            android:textColor="#757575"
+            android:textSize="14sp" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Relationship Intent"
-            android:textColor="#333333"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/menu_occupation" />
+            android:layout_marginTop="20dp"
+            android:text="@string/section_interest_categories"
+            android:textColor="#1A1A1A"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/cg_intent"
+        <LinearLayout
+            android:id="@+id/ll_interest_sections"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            app:singleSelection="true"
-            app:selectionRequired="true"
-            app:layout_constraintTop_toBottomOf="@+id/tv_intent_label">
-        </com.google.android.material.chip.ChipGroup>
-
-        <TextView
-            android:id="@+id/tv_lifestyle_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Lifestyle"
-            android:textColor="#333333"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cg_intent" />
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/cg_lifestyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:singleSelection="false"
-            app:layout_constraintTop_toBottomOf="@+id/tv_lifestyle_label">
-        </com.google.android.material.chip.ChipGroup>
-
-        <TextView
-            android:id="@+id/tv_intellectual_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Intellectual &amp; Learning"
-            android:textColor="#333333"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cg_lifestyle" />
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/cg_intellectual"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:singleSelection="false"
-            app:layout_constraintTop_toBottomOf="@+id/tv_intellectual_label">
-        </com.google.android.material.chip.ChipGroup>
+            android:orientation="vertical" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_submit_profile"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="48dp"
-            android:layout_marginBottom="32dp"
-            android:text="Save Profile"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/save_interests"
+            android:textAllCaps="false"
             android:textColor="#FFFFFF"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:backgroundTint="#E91E63"
-            app:cornerRadius="30dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cg_intellectual" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:cornerRadius="28dp" />
+    </LinearLayout>
 </ScrollView>

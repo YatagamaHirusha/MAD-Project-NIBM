@@ -21,7 +21,8 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginStart="16dp"
-            android:src="@android:drawable/btn_star_big_on"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_nav_chatbot"
             app:tint="#E91E63"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -40,12 +41,14 @@
             app:layout_constraintStart_toEndOf="@+id/iv_ai_icon"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/iv_clear_chat"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginEnd="16dp"
-            android:padding="4dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/cd_clear_chat"
+            android:padding="10dp"
             android:src="@android:drawable/ic_menu_delete"
             app:tint="#9E9E9E"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -84,9 +87,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="Analyze my ERC-RS score"
+                android:minHeight="44dp"
+                android:text="Analyze my ECR-RS score"
                 android:textColor="#E91E63"
+                android:textSize="14sp"
                 app:chipBackgroundColor="#FCE4EC"
+                app:chipMinHeight="44dp"
                 app:chipStrokeWidth="0dp" />
 
             <com.google.android.material.chip.Chip
@@ -95,9 +101,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
+                android:minHeight="44dp"
                 android:text="Help me draft an intro message"
                 android:textColor="#E91E63"
+                android:textSize="14sp"
                 app:chipBackgroundColor="#FCE4EC"
+                app:chipMinHeight="44dp"
                 app:chipStrokeWidth="0dp" />
 
             <com.google.android.material.chip.Chip
@@ -106,9 +115,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
+                android:minHeight="44dp"
                 android:text="Why do I attract avoidant partners?"
                 android:textColor="#E91E63"
+                android:textSize="14sp"
                 app:chipBackgroundColor="#FCE4EC"
+                app:chipMinHeight="44dp"
                 app:chipStrokeWidth="0dp" />
 
         </LinearLayout>

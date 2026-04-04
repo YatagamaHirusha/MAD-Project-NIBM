@@ -70,14 +70,32 @@
             android:layout_height="56dp"
             android:layout_marginTop="16dp"
             android:background="@android:drawable/editbox_background"
-            android:hint="Date of Birth (MM/DD/YYYY)"
-            android:inputType="date"
+            android:hint="@string/auth_dob_hint"
+            android:inputType="none"
             android:focusable="false"
             android:clickable="true"
             android:padding="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_reg_email" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_reg_gender"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/auth_gender_hint"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_dob">
+
+            <AutoCompleteTextView
+                android:id="@+id/act_reg_gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <EditText
             android:id="@+id/et_reg_password"
@@ -90,7 +108,20 @@
             android:padding="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_dob" />
+            app:layout_constraintTop_toBottomOf="@+id/til_reg_gender" />
+
+        <EditText
+            android:id="@+id/et_reg_password_confirm"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="16dp"
+            android:background="@android:drawable/editbox_background"
+            android:hint="@string/auth_password_confirm_hint"
+            android:inputType="textPassword"
+            android:padding="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_reg_password" />
 
         <Button
             android:id="@+id/btn_register"
@@ -104,7 +135,7 @@
             app:cornerRadius="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_reg_password" />
+            app:layout_constraintTop_toBottomOf="@+id/et_reg_password_confirm" />
 
         <Space
             android:layout_width="match_parent"

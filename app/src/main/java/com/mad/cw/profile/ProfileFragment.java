@@ -36,9 +36,12 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.mad.cw.auth.AuthValidation;
 import com.mad.cw.supabase.core.SessionStore;
 import com.mad.cw.supabase.core.SupabaseRestClient;
+import com.mad.cw.supabase.repositories.ProfileAvatarStorage;
 import com.mad.cw.supabase.repositories.ProfileRecord;
 import com.mad.cw.supabase.repositories.ProfileRemoteRepository;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
@@ -136,28 +139,68 @@ public class ProfileFragment extends Fragment {
             return;
         }
         Context app = requireContext().getApplicationContext();
+        final boolean rowExistsSnapshot = profileRowExists;
         try {
             io.execute(
                     () -> {
                         try {
                             boolean ok = AvatarStorage.savePickedImage(app, uri);
-                            safePost(
-                                    () -> {
-                                        if (ok) {
+                            if (!ok) {
+                                safePost(
+                                        () ->
+                                                Toast.makeText(
+                                                                requireContext(),
+                                                                R.string.profile_photo_save_failed,
+                                                                Toast.LENGTH_SHORT)
+                                                        .show());
+                                return;
+                            }
+                            if (SupabaseRestClient.isConfigured() && SessionStore.isLoggedIn()) {
+                                try {
+                                    File file = AvatarStorage.getFile(app);
+                                    String publicUrl = ProfileAvatarStorage.uploadProfileJpeg(file);
+                                    ProfileRemoteRepository.persistAvatarUrlToProfile(
+                                            publicUrl, rowExistsSnapshot);
+                                    ProfilePreferences.get(app)
+                                            .edit()
+                                            .putString(ProfilePreferences.KEY_AVATAR_URL, publicUrl)
+                                            .commit();
+                                    safePost(
+                                            () -> {
+                                                profileRowExists = true;
+                                                refreshProfilePhoto();
+                                                Toast.makeText(
+                                                                requireContext(),
+                                                                R.string.profile_photo_saved_cloud,
+                                                                Toast.LENGTH_SHORT)
+                                                        .show();
+                                            });
+                                } catch (IOException e) {
+                                    safePost(
+                                            () -> {
+                                                refreshProfilePhoto();
+                                                Toast.makeText(
+                                                                requireContext(),
+                                                                getString(
+                                                                        R.string.profile_photo_cloud_failed,
+                                                                        e.getMessage() != null
+                                                                                ? e.getMessage()
+                                                                                : ""),
+                                                                Toast.LENGTH_LONG)
+                                                        .show();
+                                            });
+                                }
+                            } else {
+                                safePost(
+                                        () -> {
                                             refreshProfilePhoto();
                                             Toast.makeText(
                                                             requireContext(),
                                                             R.string.profile_photo_saved,
                                                             Toast.LENGTH_SHORT)
                                                     .show();
-                                        } else {
-                                            Toast.makeText(
-                                                            requireContext(),
-                                                            R.string.profile_photo_save_failed,
-                                                            Toast.LENGTH_SHORT)
-                                                    .show();
-                                        }
-                                    });
+                                        });
+                            }
                         } catch (Exception e) {
                             safePost(
                                     () ->
@@ -418,7 +461,16 @@ public class ProfileFragment extends Fragment {
                 complete ? getString(R.string.profile_subtitle) : getString(R.string.profile_subtitle_incomplete));
     }
 
+    /** Saves to Supabase; local prefs are updated only after a successful remote write. */
     private void saveProfileToRemote() {
+        saveProfileToRemoteInternal(null);
+    }
+
+    /**
+     * @param afterSuccessfulSave optional UI work after mirror (e.g. collapse editor when finishing via
+     *     "Done editing").
+     */
+    private void saveProfileToRemoteInternal(@Nullable Runnable afterSuccessfulSave) {
         String name = textOf(etName);
         String email = textOf(etEmail);
         String dob = textOf(etDob);
@@ -453,7 +505,7 @@ public class ProfileFragment extends Fragment {
 
         final boolean rowExistsSnapshot = profileRowExists;
         final String avatarUrl = ProfilePreferences.get(ctx).getString(ProfilePreferences.KEY_AVATAR_URL, "");
-        btnSave.setEnabled(false);
+        setProfileSaveControlsEnabled(false);
         try {
             io.execute(() -> {
                 try {
@@ -470,16 +522,19 @@ public class ProfileFragment extends Fragment {
                             rowExistsSnapshot);
                     safePost(() -> {
                         profileRowExists = true;
-                        btnSave.setEnabled(true);
+                        setProfileSaveControlsEnabled(true);
                         actLocation.setText(location, false);
                         actOccupation.setText(occupation, false);
                         mirrorPrefsFromForm();
                         updateSubtitleFromForm();
+                        if (afterSuccessfulSave != null) {
+                            afterSuccessfulSave.run();
+                        }
                         Toast.makeText(requireContext(), R.string.profile_saved, Toast.LENGTH_SHORT).show();
                     });
                 } catch (Exception e) {
                     safePost(() -> {
-                        btnSave.setEnabled(true);
+                        setProfileSaveControlsEnabled(true);
                         Toast.makeText(
                                         requireContext(),
                                         getString(R.string.profile_save_failed)
@@ -490,20 +545,38 @@ public class ProfileFragment extends Fragment {
                 }
             });
         } catch (RejectedExecutionException e) {
-            btnSave.setEnabled(true);
+            setProfileSaveControlsEnabled(true);
         }
     }
 
+    private void setProfileSaveControlsEnabled(boolean enabled) {
+        if (btnSave != null) {
+            btnSave.setEnabled(enabled);
+        }
+        if (btnEditPreferences != null) {
+            btnEditPreferences.setEnabled(enabled);
+        }
+    }
+
+    /**
+     * Opens the form for editing, or on "Done editing" pushes the current form to Supabase first (remote is
+     * source of truth); local cache updates only after success.
+     */
     private void toggleProfileEditor() {
         if (cardProfileEditor == null || btnEditPreferences == null) {
             return;
         }
         boolean opening = cardProfileEditor.getVisibility() != View.VISIBLE;
-        cardProfileEditor.setVisibility(opening ? View.VISIBLE : View.GONE);
-        btnEditPreferences.setText(
-                opening
-                        ? getString(R.string.profile_done_editing)
-                        : getString(R.string.profile_edit_preferences));
+        if (opening) {
+            cardProfileEditor.setVisibility(View.VISIBLE);
+            btnEditPreferences.setText(getString(R.string.profile_done_editing));
+            return;
+        }
+        saveProfileToRemoteInternal(
+                () -> {
+                    cardProfileEditor.setVisibility(View.GONE);
+                    btnEditPreferences.setText(getString(R.string.profile_edit_preferences));
+                });
     }
 
     private void performLogout(View logoutControl) {

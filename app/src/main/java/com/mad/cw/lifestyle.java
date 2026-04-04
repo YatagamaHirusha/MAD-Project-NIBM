@@ -1,6 +1,15 @@
 package com.mad.cw;
 
+import com.mad.cw.R;
 import android.os.Bundle;
+import com.mad.cw.assessment.*;
+import com.mad.cw.chat.*;
+import com.mad.cw.inbox.*;
+import com.mad.cw.interests.*;
+import com.mad.cw.matching.*;
+import com.mad.cw.profile.*;
+import com.mad.cw.shell.*;
+import com.mad.cw.welcome.*;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
