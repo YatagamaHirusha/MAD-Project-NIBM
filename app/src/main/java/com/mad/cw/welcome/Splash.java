@@ -16,25 +16,75 @@ import com.mad.cw.welcome.*;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.splashscreen.SplashScreen;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieDrawable;
+import com.airbnb.lottie.RenderMode;
 import com.mad.cw.supabase.core.SessionStore;
 
 public class Splash extends AppCompatActivity {
 
+    private static final long INTRO_MIN_DISPLAY_MS = 3200L;
+
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
+    private Runnable pendingNavigate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SessionStore.init(getApplicationContext());
+
+        boolean introDone = SplashPreferences.isIntroAnimationDone(this);
+        setTheme(introDone ? R.style.Theme_MindMatch : R.style.Theme_MindMatch_Splash);
+        if (!introDone) {
+            SplashScreen.installSplashScreen(this);
+        }
+
         super.onCreate(savedInstanceState);
+
+        if (introDone) {
+            goToNextAndFinish();
+            return;
+        }
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_splash);
 
-        SessionStore.init(this);
+        LottieAnimationView lottie = findViewById(R.id.lottie_splash_animation);
+        if (lottie != null) {
+            lottie.setRepeatCount(LottieDrawable.INFINITE);
+            lottie.setRenderMode(RenderMode.HARDWARE);
+            lottie.addLottieOnCompositionLoadedListener(
+                    composition -> {
+                        if (!isFinishing()) {
+                            lottie.playAnimation();
+                        }
+                    });
+        }
 
-        // Same delay for everyone: a sub-second splash is easy to miss during cold start.
-        long splashMs = 2000L;
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            Class<?> next = SessionStore.isLoggedIn() ? MainActivity.class : Welcome.class;
-            startActivity(new Intent(Splash.this, next));
-            finish();
-        }, splashMs);
+        pendingNavigate =
+                () -> {
+                    if (isFinishing()) {
+                        return;
+                    }
+                    SplashPreferences.markIntroAnimationDone(Splash.this);
+                    goToNextAndFinish();
+                };
+        mainHandler.postDelayed(pendingNavigate, INTRO_MIN_DISPLAY_MS);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (pendingNavigate != null) {
+            mainHandler.removeCallbacks(pendingNavigate);
+            pendingNavigate = null;
+        }
+        super.onDestroy();
+    }
+
+    private void goToNextAndFinish() {
+        Class<?> next = SessionStore.isLoggedIn() ? MainActivity.class : Welcome.class;
+        startActivity(new Intent(Splash.this, next));
+        finish();
     }
 }

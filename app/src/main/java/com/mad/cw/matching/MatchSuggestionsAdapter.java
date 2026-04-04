@@ -20,20 +20,14 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public final class MatchSuggestionsAdapter extends RecyclerView.Adapter<MatchSuggestionsAdapter.Holder> {
-    private static final int TYPE_NORMAL = 0;
-    private static final int TYPE_PENDING = 1;
 
     public interface Listener {
         void onOpenProfile(@NonNull MatchSuggestion suggestion);
-
-        void onSendRequest(@NonNull MatchSuggestion suggestion);
     }
 
     private final List<MatchSuggestion> items = new ArrayList<>();
@@ -44,7 +38,6 @@ public final class MatchSuggestionsAdapter extends RecyclerView.Adapter<MatchSug
         this.listener = listener;
     }
 
-    /** Who currently has an outbound request (local mirror or demo). Empty means none. */
     public void setPendingPeerId(@Nullable String peerId) {
         this.pendingPeerId = peerId != null ? peerId : "";
         notifyDataSetChanged();
@@ -70,18 +63,9 @@ public final class MatchSuggestionsAdapter extends RecyclerView.Adapter<MatchSug
     }
 
     @Override
-    public int getItemViewType(int position) {
-        MatchSuggestion s = items.get(position);
-        boolean pending = pendingPeerId != null && pendingPeerId.equals(s.peerId);
-        return pending ? TYPE_PENDING : TYPE_NORMAL;
-    }
-
-    @Override
     public void onBindViewHolder(@NonNull Holder h, int position) {
         MatchSuggestion s = items.get(position);
-        int viewType = getItemViewType(position);
-        boolean hasPending = pendingPeerId != null && !pendingPeerId.isEmpty();
-        boolean pendingThis = viewType == TYPE_PENDING;
+        boolean pendingThis = pendingPeerId != null && pendingPeerId.equals(s.peerId);
 
         h.rank.setText(String.valueOf(s.rank));
         h.name.setText(s.displayName);
@@ -89,41 +73,16 @@ public final class MatchSuggestionsAdapter extends RecyclerView.Adapter<MatchSug
         h.locationLine.setText(
                 h.itemView.getContext()
                         .getString(R.string.match_line_location_job, s.location, s.occupation));
-        if (Double.isNaN(s.anxietyMean) || Double.isNaN(s.avoidanceMean)) {
-            h.ecr.setText(h.itemView.getContext().getString(R.string.match_ecr_peer_hidden));
-        } else {
-            h.ecr.setText(MatchScoring.formatEcrLine(s.anxietyMean, s.avoidanceMean));
-        }
-        h.progress.setProgress(s.matchPercent);
 
         Glide.with(h.photo).load(s.photoUrl).circleCrop().into(h.photo);
 
         if (pendingThis) {
             h.pendingBadge.setVisibility(View.VISIBLE);
-            h.sendRequest.setEnabled(false);
-            h.sendRequest.setText(R.string.match_pending_response);
-            h.sendRequest.setVisibility(View.VISIBLE);
-            h.sendRequest.setAlpha(0.9f);
-        } else if (hasPending) {
-            h.pendingBadge.setVisibility(View.GONE);
-            h.sendRequest.setVisibility(View.GONE);
         } else {
             h.pendingBadge.setVisibility(View.GONE);
-            h.sendRequest.setVisibility(View.VISIBLE);
-            h.sendRequest.setEnabled(true);
-            h.sendRequest.setText(R.string.match_request_send);
-            h.sendRequest.setAlpha(1f);
         }
 
         h.itemView.setOnClickListener(v -> listener.onOpenProfile(s));
-
-        h.sendRequest.setOnClickListener(
-                v -> {
-                    if (!h.sendRequest.isEnabled()) {
-                        return;
-                    }
-                    listener.onSendRequest(s);
-                });
     }
 
     static final class Holder extends RecyclerView.ViewHolder {
@@ -132,10 +91,7 @@ public final class MatchSuggestionsAdapter extends RecyclerView.Adapter<MatchSug
         final TextView name;
         final TextView percent;
         final TextView locationLine;
-        final TextView ecr;
         final TextView pendingBadge;
-        final LinearProgressIndicator progress;
-        final MaterialButton sendRequest;
 
         Holder(@NonNull View itemView) {
             super(itemView);
@@ -144,10 +100,7 @@ public final class MatchSuggestionsAdapter extends RecyclerView.Adapter<MatchSug
             name = itemView.findViewById(R.id.tv_match_name);
             percent = itemView.findViewById(R.id.tv_match_percent);
             locationLine = itemView.findViewById(R.id.tv_match_location_line);
-            ecr = itemView.findViewById(R.id.tv_match_ecr);
             pendingBadge = itemView.findViewById(R.id.tv_match_pending_badge);
-            progress = itemView.findViewById(R.id.progress_match_strength);
-            sendRequest = itemView.findViewById(R.id.btn_match_send_request);
         }
     }
 }

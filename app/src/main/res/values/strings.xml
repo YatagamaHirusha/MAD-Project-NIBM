@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">cw</string>
+    <string name="app_name">MindMatch</string>
+    <string name="splash_tagline">Finding your match…</string>
     <string name="cd_back">Back</string>
     <string name="cd_profile">Open profile</string>
     <string name="cd_logout">Log out</string>
@@ -26,6 +27,7 @@
     <string name="match_request_send">Send request</string>
     <string name="match_request_sent">Request sent</string>
     <string name="match_request_already_pending">You already sent a match request. Wait for a response before sending another.</string>
+    <string name="match_request_blocked_other_pending">You already have a pending request to someone else. Wait for their response before sending a new one.</string>
     <string name="match_request_demo_saved">Request saved on this device. Demo profiles are not linked to real accounts.</string>
     <string name="match_request_sent_server">Match request sent.</string>
     <string name="match_request_failed">Could not send request.</string>
@@ -40,6 +42,19 @@
     <string name="match_peer_profile_title">Member profile</string>
     <string name="match_peer_profile_unavailable">Could not load this profile.</string>
     <string name="match_peer_bio_empty">No bio yet.</string>
+    <string name="match_peer_age_years">%d years old</string>
+    <string name="match_peer_age_unknown">Age not shared</string>
+    <string name="match_peer_section_about">About</string>
+    <string name="match_peer_section_details">Details</string>
+    <string name="match_peer_label_gender">Gender</string>
+    <string name="match_peer_label_looking_for">Open to meeting</string>
+    <string name="match_peer_label_location">Location</string>
+    <string name="match_peer_label_occupation">Occupation</string>
+    <string name="match_peer_section_lifestyle">Lifestyle &amp; interests</string>
+    <string name="match_peer_interests_empty">They have not added lifestyle and interest tags yet.</string>
+    <string name="match_peer_detail_pair">%1$s: %2$s</string>
+    <string name="match_card_tap_profile">Tap to view profile</string>
+    <string name="match_peer_interests_from_profile">From their interests profile</string>
     <string name="cd_open_match_profile">Open profile</string>
     <string name="inbox_subtitle">Conversations with people you have matched with.</string>
     <string name="dashboard_basic_subtitle_done">Required details saved — you can edit anytime in Profile.</string>

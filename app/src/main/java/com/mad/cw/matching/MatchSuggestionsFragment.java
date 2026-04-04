@@ -29,14 +29,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.mad.cw.supabase.core.SessionStore;
 import com.mad.cw.supabase.core.SupabaseRestClient;
-import com.mad.cw.supabase.repositories.MatchRequestRepository;
 import com.mad.cw.supabase.repositories.MatchSuggestionBatchRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.RejectedExecutionException;
 
 public class MatchSuggestionsFragment extends Fragment {
 
@@ -77,84 +75,19 @@ public class MatchSuggestionsFragment extends Fragment {
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
         adapter =
                 new MatchSuggestionsAdapter(
-                        new MatchSuggestionsAdapter.Listener() {
-                            @Override
-                            public void onOpenProfile(@NonNull MatchSuggestion suggestion) {
-                                if (!isAdded()) {
-                                    return;
-                                }
-                                requireActivity()
-                                        .getSupportFragmentManager()
-                                        .beginTransaction()
-                                        .replace(
-                                                R.id.fragment_container,
-                                                MatchPeerProfileFragment.newInstance(suggestion.peerId))
-                                        .addToBackStack(null)
-                                        .commit();
+                        suggestion -> {
+                            if (!isAdded()) {
+                                return;
                             }
-
-                            @Override
-                            public void onSendRequest(@NonNull MatchSuggestion suggestion) {
-                                Context ctx = requireContext();
-                                String pending = MatchRequestLocalStore.getPendingPeerId(ctx);
-                                if (pending != null && !pending.isEmpty() && !pending.equals(suggestion.peerId)) {
-                                    Toast.makeText(ctx, R.string.match_request_already_pending, Toast.LENGTH_LONG)
-                                            .show();
-                                    return;
-                                }
-                                if (pending != null && pending.equals(suggestion.peerId)) {
-                                    return;
-                                }
-
-                                if (!UuidValidation.isUuid(suggestion.peerId)) {
-                                    MatchRequestLocalStore.setPending(ctx, suggestion.peerId, suggestion.rank);
-                                    applyListState();
-                                    Toast.makeText(ctx, R.string.match_request_demo_saved, Toast.LENGTH_LONG).show();
-                                    return;
-                                }
-
-                                if (!SupabaseRestClient.isConfigured() || !SessionStore.isLoggedIn()) {
-                                    MatchRequestLocalStore.setPending(ctx, suggestion.peerId, suggestion.rank);
-                                    applyListState();
-                                    Toast.makeText(ctx, R.string.match_request_demo_saved, Toast.LENGTH_LONG).show();
-                                    return;
-                                }
-
-                                try {
-                                    io.execute(
-                                            () -> {
-                                                try {
-                                                    MatchRequestRepository.insertPending(
-                                                            suggestion.peerId, suggestion.rank);
-                                                    safePost(
-                                                            () -> {
-                                                                MatchRequestLocalStore.setPending(
-                                                                        ctx, suggestion.peerId, suggestion.rank);
-                                                                applyListState();
-                                                                Toast.makeText(
-                                                                                ctx,
-                                                                                R.string.match_request_sent_server,
-                                                                                Toast.LENGTH_SHORT)
-                                                                        .show();
-                                                            });
-                                                } catch (Exception e) {
-                                                    safePost(
-                                                            () ->
-                                                                    Toast.makeText(
-                                                                                    ctx,
-                                                                                    getString(R.string.match_request_failed)
-                                                                                            + (e.getMessage() != null
-                                                                                                    ? " "
-                                                                                                            + e.getMessage()
-                                                                                                    : ""),
-                                                                                    Toast.LENGTH_LONG)
-                                                                            .show());
-                                                }
-                                            });
-                                } catch (RejectedExecutionException ignored) {
-                                    Toast.makeText(ctx, R.string.match_request_failed, Toast.LENGTH_SHORT).show();
-                                }
-                            }
+                            requireActivity()
+                                    .getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(
+                                            R.id.fragment_container,
+                                            MatchPeerProfileFragment.newInstance(
+                                                    suggestion.peerId, suggestion.rank))
+                                    .addToBackStack(null)
+                                    .commit();
                         });
         rv.setAdapter(adapter);
 

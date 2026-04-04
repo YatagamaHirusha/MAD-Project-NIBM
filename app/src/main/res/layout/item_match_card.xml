@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="14dp"
+    android:clickable="true"
+    android:focusable="true"
     app:cardBackgroundColor="#FFFFFF"
     app:cardCornerRadius="18dp"
     app:cardElevation="2dp"
@@ -20,7 +22,7 @@
             android:id="@+id/iv_match_photo"
             android:layout_width="72dp"
             android:layout_height="72dp"
-            android:contentDescription="@null"
+            android:contentDescription="@string/cd_open_match_profile"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -101,46 +103,16 @@
             tools:text="Colombo · Teacher" />
 
         <TextView
-            android:id="@+id/tv_match_ecr"
+            android:id="@+id/tv_match_tap_hint"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="6dp"
-            android:textColor="#9E9E9E"
+            android:layout_marginTop="10dp"
+            android:text="@string/match_card_tap_profile"
+            android:textColor="#BDBDBD"
             android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/iv_match_photo"
-            app:layout_constraintTop_toBottomOf="@+id/tv_match_location_line"
-            tools:text="ECR-RS · Anxiety 3.8 · Avoidance 3.2 (1–7)" />
-
-        <com.google.android.material.progressindicator.LinearProgressIndicator
-            android:id="@+id/progress_match_strength"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:max="100"
-            app:indicatorColor="#E91E63"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_match_photo"
-            app:trackColor="#FCE4EC"
-            app:trackCornerRadius="4dp"
-            app:trackThickness="6dp"
-            tools:progress="91" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_match_send_request"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="14dp"
-            android:text="@string/match_request_send"
-            android:textAllCaps="false"
-            android:textSize="15sp"
-            app:backgroundTint="#E91E63"
-            app:cornerRadius="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/progress_match_strength" />
+            app:layout_constraintTop_toBottomOf="@id/iv_match_photo" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

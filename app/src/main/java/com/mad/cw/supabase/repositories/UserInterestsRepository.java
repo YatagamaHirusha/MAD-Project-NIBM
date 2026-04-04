@@ -2,8 +2,11 @@ package com.mad.cw.supabase.repositories;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import com.mad.cw.interests.InterestTaxonomy;
 import com.mad.cw.interests.UserInterestStore;
+import com.mad.cw.matching.UuidValidation;
 import com.mad.cw.supabase.core.PostgrestError;
 import com.mad.cw.supabase.core.SessionStore;
 import com.mad.cw.supabase.core.SupabaseRestClient;
@@ -14,6 +17,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +38,90 @@ public final class UserInterestsRepository {
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
     private UserInterestsRepository() {}
+
+    /** One row from {@code user_interests} for display (e.g. peer profile). */
+    public static final class PeerInterestRow {
+        @NonNull public final String location;
+        @NonNull public final String occupation;
+        @NonNull public final Map<String, List<String>> byCategory;
+
+        public PeerInterestRow(
+                @NonNull String location,
+                @NonNull String occupation,
+                @NonNull Map<String, List<String>> byCategory) {
+            this.location = location;
+            this.occupation = occupation;
+            this.byCategory = byCategory;
+        }
+
+        public boolean hasAnyTags() {
+            for (List<String> list : byCategory.values()) {
+                if (list != null && !list.isEmpty()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    /**
+     * Loads {@code user_interests} for another user (RLS: {@code interests_select_looking_peers}). Returns empty
+     * maps when no row or on failure.
+     */
+    @NonNull
+    public static PeerInterestRow fetchPeerRow(@NonNull String userId) throws IOException {
+        if (!UuidValidation.isUuid(userId)) {
+            return new PeerInterestRow("", "", Collections.emptyMap());
+        }
+        if (SessionStore.getAccessToken() == null || SessionStore.getAccessToken().isEmpty()) {
+            throw new IOException("Not signed in");
+        }
+        HttpUrl base = SupabaseRestClient.getInstance().tableUrl("user_interests");
+        if (base == null) {
+            throw new IOException("Supabase URL not configured");
+        }
+        String select =
+                "location,occupation,lifestyle,arts_creativity,music,movies_shows,intellectual_learning,"
+                        + "food_drinks,sports_outdoor,gaming_digital,travel_culture,personality_values,"
+                        + "relationship_intent";
+        HttpUrl url = base.newBuilder()
+                .addQueryParameter("select", select)
+                .addQueryParameter("user_id", "eq." + userId)
+                .addQueryParameter("limit", "1")
+                .build();
+
+        OkHttpClient client = SupabaseRestClient.getInstance().httpClient();
+        Request request = new Request.Builder().url(url).get().build();
+
+        try (Response response = client.newCall(request).execute()) {
+            String resp = response.body() != null ? response.body().string() : "[]";
+            if (!response.isSuccessful()) {
+                throw new IOException(
+                        response.code() + ": " + PostgrestError.userMessage(response.code(), resp));
+            }
+            JSONArray arr = new JSONArray(resp);
+            if (arr.length() == 0) {
+                return new PeerInterestRow("", "", Collections.emptyMap());
+            }
+            JSONObject row = arr.getJSONObject(0);
+            String location = row.optString("location", "");
+            String occupation = row.optString("occupation", "");
+            Map<String, List<String>> map = new HashMap<>();
+            for (InterestTaxonomy.Category cat : InterestTaxonomy.CATEGORIES) {
+                String dbCol = taxonomyColumnToDbColumn(cat.columnName);
+                if (dbCol.isEmpty()) {
+                    continue;
+                }
+                map.put(cat.columnName, jsonbValueToList(row, dbCol));
+            }
+            return new PeerInterestRow(
+                    location != null ? location : "",
+                    occupation != null ? occupation : "",
+                    map);
+        } catch (JSONException e) {
+            throw new IOException("Invalid interests response", e);
+        }
+    }
 
     /**
      * Maps {@link InterestTaxonomy.Category#columnName} to PostgREST / DB column names in {@code user_interests}.
