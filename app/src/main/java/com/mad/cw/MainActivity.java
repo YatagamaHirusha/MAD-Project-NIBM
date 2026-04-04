@@ -1,43 +1,55 @@
 package com.mad.cw;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        // we can use sharedPreference to save states of the user and check if the user is logged in or not.
-        // for now, we will just use a boolean variable to check if the user is logged in or not.
-        boolean isLoggedIn = false;
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
 
-        if(isLoggedIn){
-            Intent intent = new Intent(MainActivity.this, Welcome.class);
-            startActivity(intent);
-            finish();
+        // 1. Set the Hub (not the ChatBot) as the default screen on launch
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new DashboardFragment())
+                    .commit();
+            // Make sure the bottom navigation visually selects the Hub icon on startup
+            bottomNav.setSelectedItemId(R.id.nav_hub);
         }
-        else {
-            long splashTime = 4500L;
-            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(MainActivity.this, Welcome.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }, splashTime);
-        }
+
+        // 2. Handle all Bottom Navigation clicks
+        bottomNav.setOnItemSelectedListener(item -> {
+            Fragment selectedFragment = null;
+
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.nav_hub) {
+                selectedFragment = new DashboardFragment();
+            } else if (itemId == R.id.nav_chatbot) {
+                // Here is your AI Chat screen!
+                selectedFragment = new ChatBotFragment();
+            } else if (itemId == R.id.nav_inbox) {
+                // selectedFragment = new InboxFragment();
+                return true; // Return true so the icon highlights, even if blank
+            } else if (itemId == R.id.nav_profile) {
+                // selectedFragment = new ProfileFragment();
+                return true;
+            }
+
+            // If we have a fragment to show, swap it into the container
+            if (selectedFragment != null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, selectedFragment)
+                        .commit();
+                return true;
+            }
+            return false;
+        });
     }
 }
