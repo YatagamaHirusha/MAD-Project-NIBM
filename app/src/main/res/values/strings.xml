@@ -15,6 +15,11 @@
     <string name="dashboard_match_coming_soon">Matching will open here in a future update.</string>
     <string name="match_suggestions_title">Your top matches</string>
     <string name="match_suggestions_subtitle">Up to five people ranked with the same rule-based signals as our research model (demo profiles in your city).</string>
+    <string name="match_suggestions_subtitle_ml">Up to five real members ranked by your MatchMind server (same location &amp; preferences as in your profile).</string>
+    <string name="match_suggestions_loading_title">Finding matches…</string>
+    <string name="match_suggestions_loading_body">Talking to the match server. This can take a bit when the service wakes up.</string>
+    <string name="match_ml_fallback">Could not load server matches. Showing demo suggestions instead.</string>
+    <string name="match_ecr_peer_hidden">ECR-RS · scores not shown for privacy</string>
     <string name="match_suggestions_empty_title">No matches in this run</string>
     <string name="match_suggestions_empty_body">Try a different city in Profile or Interests, or widen who you are open to meeting. Demo profiles only cover selected areas.</string>
     <string name="match_suggestion_say_hello">Say hello</string>

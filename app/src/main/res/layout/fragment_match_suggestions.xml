@@ -100,6 +100,7 @@
         app:layout_constraintTop_toBottomOf="@+id/layout_match_suggestions_header">
 
         <TextView
+            android:id="@+id/tv_match_empty_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -109,6 +110,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tv_match_empty_body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

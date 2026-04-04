@@ -1,5 +1,9 @@
 package com.mad.cw.supabase.repositories;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.mad.cw.matching.UuidValidation;
 import com.mad.cw.supabase.core.PostgrestError;
 import com.mad.cw.supabase.core.SessionStore;
 import com.mad.cw.supabase.core.SupabaseRestClient;
@@ -9,6 +13,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
@@ -46,6 +56,86 @@ public final class ProfileRemoteRepository {
         public FetchedProfile(ProfileRecord record, boolean rowExists) {
             this.record = record;
             this.rowExists = rowExists;
+        }
+    }
+
+    /**
+     * Loads {@code profiles} rows for the given ids (e.g. ML match candidates). Uses the signed-in user’s JWT;
+     * RLS must allow reading peers who are {@code looking_for_partner} ({@code profiles_select_looking_others}).
+     */
+    @NonNull
+    public static Map<String, ProfileRecord> fetchProfilesByIds(@NonNull Collection<String> ids)
+            throws IOException {
+        requireAccessToken();
+        if (ids.isEmpty()) {
+            return Collections.emptyMap();
+        }
+        Set<String> clean = new LinkedHashSet<>();
+        for (String id : ids) {
+            if (UuidValidation.isUuid(id)) {
+                clean.add(id);
+            }
+        }
+        if (clean.isEmpty()) {
+            return Collections.emptyMap();
+        }
+        String inCsv = String.join(",", clean);
+        OkHttpClient client = SupabaseRestClient.getInstance().httpClient();
+        Map<String, ProfileRecord> a = fetchProfilesByIdsTrySelect(inCsv, "id," + SELECT_FULL_WITH_AVATAR, client);
+        if (a != null) {
+            return a;
+        }
+        Map<String, ProfileRecord> b = fetchProfilesByIdsTrySelect(inCsv, "id," + SELECT_FULL_NO_AVATAR, client);
+        if (b != null) {
+            return b;
+        }
+        Map<String, ProfileRecord> c = fetchProfilesByIdsTrySelect(inCsv, "id," + SELECT_SLIM, client);
+        if (c == null) {
+            throw new IOException("Could not query profiles for match candidates (check database schema).");
+        }
+        return c;
+    }
+
+    /**
+     * @return map of id → profile, or {@code null} if PostgREST reports an unknown column (caller retries slimmer
+     *     select).
+     */
+    @Nullable
+    private static Map<String, ProfileRecord> fetchProfilesByIdsTrySelect(
+            String commaSeparatedIds, String select, OkHttpClient client) throws IOException {
+        HttpUrl base = SupabaseRestClient.getInstance().tableUrl("profiles");
+        if (base == null) {
+            throw new IOException("Supabase URL not configured");
+        }
+        HttpUrl url = base.newBuilder()
+                .addQueryParameter("select", select)
+                .addQueryParameter("id", "in.(" + commaSeparatedIds + ")")
+                .build();
+        Request request = new Request.Builder().url(url).get().build();
+        try (Response response = client.newCall(request).execute()) {
+            String resp = response.body() != null ? response.body().string() : "[]";
+            if (!response.isSuccessful()) {
+                int code = response.code();
+                if (code == 400 && PostgrestError.isUnknownColumnResponse(code, resp)) {
+                    return null;
+                }
+                throw new IOException(code + ": " + PostgrestError.userMessage(code, resp));
+            }
+            try {
+                JSONArray arr = new JSONArray(resp);
+                Map<String, ProfileRecord> map = new HashMap<>();
+                for (int i = 0; i < arr.length(); i++) {
+                    JSONObject o = arr.getJSONObject(i);
+                    String id = o.optString("id", "");
+                    if (id.isEmpty()) {
+                        continue;
+                    }
+                    map.put(id, ProfileRecord.fromJsonObject(o));
+                }
+                return map;
+            } catch (JSONException e) {
+                throw new IOException("Invalid profiles response", e);
+            }
         }
     }
 

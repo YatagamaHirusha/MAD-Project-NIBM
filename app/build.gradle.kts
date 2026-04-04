@@ -32,6 +32,8 @@ android {
         val supabaseAnonKey = localProps.getProperty("supabase.anon.key", "")
         val geminiApiKey =
             localProps.getProperty("GEMINI_API_KEY", localProps.getProperty("gemini.api.key", ""))
+        val mlApiBaseUrl =
+            localProps.getProperty("matchmind.ml.api.base.url", "")
 
         fun escapeForBuildConfig(value: String): String =
             value.replace("\\", "\\\\").replace("\"", "\\\"")
@@ -39,6 +41,7 @@ android {
         buildConfigField("String", "SUPABASE_URL", "\"${escapeForBuildConfig(supabaseUrl)}\"")
         buildConfigField("String", "SUPABASE_ANON_KEY", "\"${escapeForBuildConfig(supabaseAnonKey)}\"")
         buildConfigField("String", "GEMINI_API_KEY", "\"${escapeForBuildConfig(geminiApiKey)}\"")
+        buildConfigField("String", "ML_API_BASE_URL", "\"${escapeForBuildConfig(mlApiBaseUrl)}\"")
     }
 
     buildTypes {

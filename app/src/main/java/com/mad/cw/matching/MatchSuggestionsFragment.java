@@ -3,6 +3,7 @@ package com.mad.cw.matching;
 import com.mad.cw.R;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ import java.util.concurrent.RejectedExecutionException;
 
 public class MatchSuggestionsFragment extends Fragment {
 
+    private static final String TAG = "MatchSuggestions";
     private MatchSuggestionsAdapter adapter;
     private List<MatchSuggestion> latestTop = new ArrayList<>();
     private ExecutorService io;
@@ -132,11 +134,85 @@ public class MatchSuggestionsFragment extends Fragment {
                         });
         rv.setAdapter(adapter);
 
-        latestTop = MatchScoring.computeTopMatches(requireContext(), 5);
-        boolean has = !latestTop.isEmpty();
+        TextView subtitle = view.findViewById(R.id.tv_match_suggestions_subtitle);
+        boolean useMl =
+                MatchMindApiClient.isConfigured()
+                        && SupabaseRestClient.isConfigured()
+                        && SessionStore.isLoggedIn()
+                        && UuidValidation.isUuid(SessionStore.getUserId());
+        if (subtitle != null) {
+            subtitle.setText(
+                    useMl
+                            ? getString(R.string.match_suggestions_subtitle_ml)
+                            : getString(R.string.match_suggestions_subtitle));
+        }
+
+        if (useMl) {
+            rv.setVisibility(View.GONE);
+            if (empty != null) {
+                empty.setVisibility(View.VISIBLE);
+                TextView t1 = empty.findViewById(R.id.tv_match_empty_title);
+                TextView t2 = empty.findViewById(R.id.tv_match_empty_body);
+                if (t1 != null) {
+                    t1.setText(R.string.match_suggestions_loading_title);
+                }
+                if (t2 != null) {
+                    t2.setText(R.string.match_suggestions_loading_body);
+                }
+            }
+            final Context appCtx = requireContext().getApplicationContext();
+            io.execute(
+                    () -> {
+                        try {
+                            List<MatchSuggestion> list = MatchSuggestionsLoader.loadTopFromMlServer(5);
+                            safePost(() -> applyLoadedMatches(list, rv, empty));
+                        } catch (Exception e) {
+                            Log.e(TAG, "ML match fetch failed", e);
+                            safePost(
+                                    () -> {
+                                        String reason = e.getMessage() != null ? e.getMessage() : "unknown";
+                                        Toast.makeText(
+                                                        appCtx,
+                                                        getString(R.string.match_ml_fallback) + " (" + reason + ")",
+                                                        Toast.LENGTH_LONG)
+                                                .show();
+                                        List<MatchSuggestion> fallback =
+                                                MatchScoring.computeTopMatches(appCtx, 5);
+                                        if (subtitle != null) {
+                                            subtitle.setText(R.string.match_suggestions_subtitle);
+                                        }
+                                        applyLoadedMatches(fallback, rv, empty);
+                                    });
+                        }
+                    });
+        } else {
+            latestTop = MatchScoring.computeTopMatches(requireContext(), 5);
+            boolean has = !latestTop.isEmpty();
+            rv.setVisibility(has ? View.VISIBLE : View.GONE);
+            if (empty != null) {
+                empty.setVisibility(has ? View.GONE : View.VISIBLE);
+            }
+            applyListState();
+        }
+    }
+
+    private void applyLoadedMatches(
+            @NonNull List<MatchSuggestion> list, RecyclerView rv, @Nullable LinearLayout empty) {
+        latestTop = list;
+        boolean has = !list.isEmpty();
         rv.setVisibility(has ? View.VISIBLE : View.GONE);
         if (empty != null) {
             empty.setVisibility(has ? View.GONE : View.VISIBLE);
+            if (!has) {
+                TextView t1 = empty.findViewById(R.id.tv_match_empty_title);
+                TextView t2 = empty.findViewById(R.id.tv_match_empty_body);
+                if (t1 != null) {
+                    t1.setText(R.string.match_suggestions_empty_title);
+                }
+                if (t2 != null) {
+                    t2.setText(R.string.match_suggestions_empty_body);
+                }
+            }
         }
         applyListState();
     }

@@ -87,7 +87,11 @@ public final class MatchSuggestionsAdapter extends RecyclerView.Adapter<MatchSug
         h.locationLine.setText(
                 h.itemView.getContext()
                         .getString(R.string.match_line_location_job, s.location, s.occupation));
-        h.ecr.setText(MatchScoring.formatEcrLine(s.anxietyMean, s.avoidanceMean));
+        if (Double.isNaN(s.anxietyMean) || Double.isNaN(s.avoidanceMean)) {
+            h.ecr.setText(h.itemView.getContext().getString(R.string.match_ecr_peer_hidden));
+        } else {
+            h.ecr.setText(MatchScoring.formatEcrLine(s.anxietyMean, s.avoidanceMean));
+        }
         h.progress.setProgress(s.matchPercent);
 
         Glide.with(h.photo).load(s.photoUrl).circleCrop().into(h.photo);
