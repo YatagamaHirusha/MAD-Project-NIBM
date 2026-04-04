@@ -30,16 +30,18 @@ public final class MatchSuggestionsAdapter extends RecyclerView.Adapter<MatchSug
     private static final int TYPE_NORMAL = 0;
     private static final int TYPE_PENDING = 1;
 
-    public interface OnSendRequestListener {
+    public interface Listener {
+        void onOpenProfile(@NonNull MatchSuggestion suggestion);
+
         void onSendRequest(@NonNull MatchSuggestion suggestion);
     }
 
     private final List<MatchSuggestion> items = new ArrayList<>();
-    private final OnSendRequestListener sendRequestListener;
+    private final Listener listener;
     @Nullable private String pendingPeerId = "";
 
-    public MatchSuggestionsAdapter(@NonNull OnSendRequestListener sendRequestListener) {
-        this.sendRequestListener = sendRequestListener;
+    public MatchSuggestionsAdapter(@NonNull Listener listener) {
+        this.listener = listener;
     }
 
     /** Who currently has an outbound request (local mirror or demo). Empty means none. */
@@ -113,12 +115,14 @@ public final class MatchSuggestionsAdapter extends RecyclerView.Adapter<MatchSug
             h.sendRequest.setAlpha(1f);
         }
 
+        h.itemView.setOnClickListener(v -> listener.onOpenProfile(s));
+
         h.sendRequest.setOnClickListener(
                 v -> {
                     if (!h.sendRequest.isEnabled()) {
                         return;
                     }
-                    sendRequestListener.onSendRequest(s);
+                    listener.onSendRequest(s);
                 });
     }
 

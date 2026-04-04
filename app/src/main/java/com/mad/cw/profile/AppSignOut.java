@@ -26,6 +26,7 @@ public final class AppSignOut {
         UserInterestStore.prefs(app).edit().clear().apply();
         AssessmentPreferences.prefs(app).edit().clear().apply();
         MatchRequestLocalStore.clear(app);
+        MatchCacheStore.clear(app);
         AvatarStorage.clear(app);
     }
 }

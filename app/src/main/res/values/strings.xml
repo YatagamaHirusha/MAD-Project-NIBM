@@ -33,6 +33,14 @@
     <string name="match_other_compatible_matches">Other Compatible Matches</string>
     <string name="match_percent_label">%1$d%% match</string>
     <string name="match_line_location_job">%1$s · %2$s</string>
+    <string name="dashboard_find_partner">Find your partner</string>
+    <string name="dashboard_view_saved_matches">View your matches</string>
+    <string name="match_action_find">Find matches</string>
+    <string name="match_action_refresh">Get new matches</string>
+    <string name="match_peer_profile_title">Member profile</string>
+    <string name="match_peer_profile_unavailable">Could not load this profile.</string>
+    <string name="match_peer_bio_empty">No bio yet.</string>
+    <string name="cd_open_match_profile">Open profile</string>
     <string name="inbox_subtitle">Conversations with people you have matched with.</string>
     <string name="dashboard_basic_subtitle_done">Required details saved — you can edit anytime in Profile.</string>
     <string name="dashboard_basic_subtitle_todo">Open Profile to add name, contact, and preferences.</string>

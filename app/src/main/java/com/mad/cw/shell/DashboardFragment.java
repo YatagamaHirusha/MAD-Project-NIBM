@@ -22,6 +22,9 @@ import com.mad.cw.shell.*;
 import com.mad.cw.welcome.*;
 
 import androidx.fragment.app.Fragment;
+
+import com.mad.cw.supabase.core.SessionStore;
+import com.mad.cw.supabase.core.SupabaseRestClient;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -252,10 +255,21 @@ public class DashboardFragment extends Fragment {
                 btnMatches.setEnabled(true);
                 btnMatches.setBackgroundTintList(ColorStateList.valueOf(0xFFE91E63));
                 btnMatches.setTextColor(ColorStateList.valueOf(0xFFFFFFFF));
+                boolean mlReady =
+                        MatchMindApiClient.isConfigured()
+                                && SupabaseRestClient.isConfigured()
+                                && SessionStore.isLoggedIn()
+                                && UuidValidation.isUuid(SessionStore.getUserId());
+                if (mlReady && MatchCacheStore.hasAny(ctx)) {
+                    btnMatches.setText(R.string.dashboard_view_saved_matches);
+                } else {
+                    btnMatches.setText(R.string.dashboard_find_partner);
+                }
             } else {
                 btnMatches.setEnabled(false);
                 btnMatches.setBackgroundTintList(ColorStateList.valueOf(0xFFE8E8E8));
                 btnMatches.setTextColor(ColorStateList.valueOf(0xFF9E9E9E));
+                btnMatches.setText(R.string.dashboard_find_partner);
             }
         }
     }
