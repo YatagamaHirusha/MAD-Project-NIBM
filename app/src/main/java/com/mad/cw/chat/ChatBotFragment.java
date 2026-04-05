@@ -77,7 +77,7 @@ public class ChatBotFragment extends Fragment {
 
         ivClearChat.setOnClickListener(v -> {
             viewModel.clearChat();
-            Toast.makeText(requireContext(), "Chat cleared", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), R.string.chat_cleared, Toast.LENGTH_SHORT).show();
         });
 
         Chip chip1 = view.findViewById(R.id.chip_prompt_1);
