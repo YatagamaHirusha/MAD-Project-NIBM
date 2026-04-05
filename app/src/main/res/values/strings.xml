@@ -1,3 +1,4 @@
+
 <resources>
     <string name="app_name">MindMatch</string>
     <string name="splash_tagline">Finding your match…</string>
@@ -16,7 +17,7 @@
     <string name="dashboard_match_coming_soon">Matching will open here in a future update.</string>
     <string name="match_suggestions_title">Your top matches</string>
     <string name="match_suggestions_subtitle">Up to five people ranked with the same rule-based signals as our research model (demo profiles in your city).</string>
-    <string name="match_suggestions_subtitle_ml">Up to five real members ranked by your MatchMind server (same location &amp; preferences as in your profile).</string>
+    <string name="match_suggestions_subtitle_ml">Up to five real members ranked by your MatchMind server (same location preferences as in your profile).</string>
     <string name="match_suggestions_loading_title">Finding matches…</string>
     <string name="match_suggestions_loading_body">Talking to the match server. This can take a bit when the service wakes up.</string>
     <string name="match_ml_fallback">Could not load server matches. Showing demo suggestions instead.</string>
@@ -50,7 +51,7 @@
     <string name="match_peer_label_looking_for">Open to meeting</string>
     <string name="match_peer_label_location">Location</string>
     <string name="match_peer_label_occupation">Occupation</string>
-    <string name="match_peer_section_lifestyle">Lifestyle &amp; interests</string>
+    <string name="match_peer_section_lifestyle">Lifestyle interests</string>
     <string name="match_peer_interests_empty">They have not added lifestyle and interest tags yet.</string>
     <string name="match_peer_detail_pair">%1$s: %2$s</string>
     <string name="match_card_tap_profile">Tap to view profile</string>
@@ -98,6 +99,7 @@
     <string name="logout">Log out</string>
     <string name="profile_subtitle">Edit how you appear to matches. Your profile is saved to your account.</string>
     <string name="profile_subtitle_incomplete">Complete all fields below to finish your basic profile (required for matching).</string>
+    <string name="hint_nickname">Nickname (username)</string>
     <string name="profile_gender_hint">Your gender</string>
     <string name="profile_target_gender_hint">Interested in</string>
     <string name="profile_target_gender_required">Select who you are interested in meeting.</string>
@@ -120,4 +122,7 @@
     <string name="ai_coach_session_failed">Could not start the AI session. Check your network and API key.</string>
     <string name="ai_coach_send_failed">Sorry, something went wrong: %1$s</string>
     <string name="ai_coach_empty_reply">I did not get a text reply. Please try again.</string>
+    <string name="email">Email</string>
+    <string name="date_of_birth">Date of birth</string>
+    <string name="display_name">Display name</string>
 </resources>

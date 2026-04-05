@@ -50,6 +50,7 @@ public class ProfileFragment extends Fragment {
 
     private TextView tvProfileSubtitle;
     private TextInputEditText etName;
+    private TextInputEditText etNickname;
     private TextInputEditText etEmail;
     private TextInputEditText etDob;
     private AutoCompleteTextView actGender;
@@ -93,6 +94,7 @@ public class ProfileFragment extends Fragment {
 
         tvProfileSubtitle = view.findViewById(R.id.tv_profile_subtitle);
         etName = view.findViewById(R.id.et_profile_name);
+        etNickname = view.findViewById(R.id.et_profile_nickname);
         etEmail = view.findViewById(R.id.et_profile_email);
         etDob = view.findViewById(R.id.et_profile_dob);
         actGender = view.findViewById(R.id.act_profile_gender);
@@ -308,6 +310,7 @@ public class ProfileFragment extends Fragment {
     private void applyRecordToForm(ProfileRecord r) {
         Context ctx = requireContext();
         etName.setText(r.displayName);
+        etNickname.setText(ProfilePreferences.get(ctx).getString(ProfilePreferences.KEY_NICKNAME, ""));
         etEmail.setText(r.email);
         etDob.setText(AuthValidation.formatDobForDisplay(r.dateOfBirth));
         actGender.setText(GenderOptions.labelForGenderValue(ctx, r.gender), false);
@@ -325,6 +328,7 @@ public class ProfileFragment extends Fragment {
         }
         SharedPreferences p = ProfilePreferences.get(ctx);
         etName.setText(p.getString(ProfilePreferences.KEY_DISPLAY_NAME, ""));
+        etNickname.setText(p.getString(ProfilePreferences.KEY_NICKNAME, ""));
         etEmail.setText(p.getString(ProfilePreferences.KEY_EMAIL, ""));
         etDob.setText(AuthValidation.formatDobForDisplay(p.getString(ProfilePreferences.KEY_DOB, "")));
         actLocation.setText(
@@ -366,8 +370,11 @@ public class ProfileFragment extends Fragment {
         if (cardProfileEditor == null || btnEditPreferences == null || !rowExists) {
             return;
         }
+        Context ctx = getContext();
+        String nickname = ctx != null ? ProfilePreferences.get(ctx).getString(ProfilePreferences.KEY_NICKNAME, "") : "";
         boolean any =
-                !isBlank(r.displayName)
+                !isBlank(nickname)
+                        || !isBlank(r.displayName)
                         || !isBlank(r.email)
                         || !isBlank(r.dateOfBirth)
                         || !isBlank(r.location)
@@ -407,6 +414,7 @@ public class ProfileFragment extends Fragment {
         }
         ProfilePreferences.get(ctx).edit()
                 .putString(ProfilePreferences.KEY_DISPLAY_NAME, textOf(etName))
+                .putString(ProfilePreferences.KEY_NICKNAME, textOf(etNickname).trim())
                 .putString(ProfilePreferences.KEY_EMAIL, textOf(etEmail))
                 .putString(ProfilePreferences.KEY_DOB, textOf(etDob))
                 .putString(

@@ -22,6 +22,8 @@ public final class ProfilePreferences {
     private static final String PREFS_NAME = "user_profile";
 
     public static final String KEY_DISPLAY_NAME = "display_name";
+    /** Optional handle shown in the app; stored locally only (not a Supabase column in this build). */
+    public static final String KEY_NICKNAME = "nickname";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_DOB = "dob";
     public static final String KEY_BIO = "bio";
