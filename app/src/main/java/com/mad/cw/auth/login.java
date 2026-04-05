@@ -18,6 +18,7 @@ import com.mad.cw.welcome.*;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.mad.cw.profile.AccountScopedLocalStore;
 import com.mad.cw.shell.AccountSync;
 import com.mad.cw.shell.MainActivity;
 import com.mad.cw.R;
@@ -78,8 +79,13 @@ public class login extends AppCompatActivity {
                     SupabaseAuthApi api = new SupabaseAuthApi();
                     final SupabaseAuthApi.AuthResponse res = api.signInWithPassword(email, password);
                     if (res.success) {
+                        String previousUserId = SessionStore.getUserId();
                         SessionStore.saveSession(
                                 res.accessToken, res.refreshToken, res.expiresInSeconds, res.userId);
+                        String newUserId = res.userId != null ? res.userId.trim() : "";
+                        if (!newUserId.isEmpty() && !newUserId.equals(previousUserId)) {
+                            AccountScopedLocalStore.clearForNewAccount(login.this.getApplicationContext());
+                        }
                         AccountSync.syncFromServer(login.this.getApplicationContext());
                     }
                     safePost(() -> {

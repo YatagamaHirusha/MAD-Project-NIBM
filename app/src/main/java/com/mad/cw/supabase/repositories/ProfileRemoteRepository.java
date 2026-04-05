@@ -465,13 +465,25 @@ public final class ProfileRemoteRepository {
     /** Uses {@link SessionStore#getAccessToken()} — must run after session is saved. */
     public static void upsertMyProfile(String userId, String displayName, String email) throws IOException {
         String token = requireAccessToken();
-        upsertMyProfile(token, userId, displayName, email, null, null);
+        upsertMyProfile(token, userId, displayName, email, null, null, null);
     }
 
     /** 4-arg upsert; same as full upsert with no DOB or gender. */
     public static void upsertMyProfile(String accessToken, String userId, String displayName, String email)
             throws IOException {
-        upsertMyProfile(accessToken, userId, displayName, email, null, null);
+        upsertMyProfile(accessToken, userId, displayName, email, null, null, null);
+    }
+
+    /** 6-arg upsert without location (same as 7-arg with {@code null} location). */
+    public static void upsertMyProfile(
+            String accessToken,
+            String userId,
+            String displayName,
+            String email,
+            String dateOfBirthMmDdYyyy,
+            String gender)
+            throws IOException {
+        upsertMyProfile(accessToken, userId, displayName, email, dateOfBirthMmDdYyyy, gender, null);
     }
 
     /**
@@ -480,6 +492,7 @@ public final class ProfileRemoteRepository {
      *
      * @param dateOfBirthMmDdYyyy optional {@code MM/dd/yyyy}
      * @param gender optional stored gender value ({@code female}, {@code male}, …)
+     * @param location optional city (same canonical values as profile / matching)
      */
     public static void upsertMyProfile(
             String accessToken,
@@ -487,7 +500,8 @@ public final class ProfileRemoteRepository {
             String displayName,
             String email,
             String dateOfBirthMmDdYyyy,
-            String gender)
+            String gender,
+            @Nullable String location)
             throws IOException {
         HttpUrl url = SupabaseRestClient.getInstance().tableUrl("profiles");
         if (url == null) {
@@ -504,6 +518,9 @@ public final class ProfileRemoteRepository {
             }
             if (gender != null && !gender.trim().isEmpty()) {
                 row.put("gender", gender.trim());
+            }
+            if (location != null && !location.trim().isEmpty()) {
+                row.put("location", location.trim());
             }
         } catch (JSONException e) {
             throw new IOException(e.getMessage());

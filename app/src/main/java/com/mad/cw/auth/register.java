@@ -52,7 +52,9 @@ public class register extends AppCompatActivity {
         EditText etDob = findViewById(R.id.et_dob);
         EditText etPassword = findViewById(R.id.et_reg_password);
         EditText etPasswordConfirm = findViewById(R.id.et_reg_password_confirm);
+        AutoCompleteTextView actLocation = findViewById(R.id.act_reg_location);
         AutoCompleteTextView actGender = findViewById(R.id.act_reg_gender);
+        LocationOccupationOptions.setupLocationDropdown(this, actLocation);
         Button btnRegister = findViewById(R.id.btn_register);
         TextView tvLogin = findViewById(R.id.tv_login_link);
 
@@ -105,6 +107,11 @@ public class register extends AppCompatActivity {
                 toast(R.string.auth_gender_required);
                 return;
             }
+            if (!LocationOccupationOptions.isValidLocation(textOf(actLocation))) {
+                toast(R.string.profile_location_must_choose);
+                return;
+            }
+            final String regLocation = LocationOccupationOptions.canonicalLocation(textOf(actLocation));
             if (!SupabaseRestClient.isConfigured()) {
                 toast(R.string.auth_supabase_not_configured);
                 return;
@@ -118,23 +125,34 @@ public class register extends AppCompatActivity {
                     SupabaseAuthApi.AuthResponse res = api.signUp(email, password, name);
                     String profileSyncError = null;
                     if (res.success) {
+                        String previousUserId = SessionStore.getUserId();
                         SessionStore.saveSession(res.accessToken, res.refreshToken, res.expiresInSeconds, res.userId);
+                        String newUserId = res.userId != null ? res.userId.trim() : "";
+                        if (!newUserId.isEmpty() && !newUserId.equals(previousUserId)) {
+                            AccountScopedLocalStore.clearForNewAccount(register.this.getApplicationContext());
+                        }
                         try {
                             ProfileRemoteRepository.upsertMyProfile(
-                                    res.accessToken, res.userId, name, email, dobStr, genderValue);
+                                    res.accessToken,
+                                    res.userId,
+                                    name,
+                                    email,
+                                    dobStr,
+                                    genderValue,
+                                    regLocation);
                         } catch (Exception e) {
                             profileSyncError = e.getMessage() != null ? e.getMessage() : e.toString();
                         }
                         AccountSync.syncFromServer(register.this.getApplicationContext());
                         SharedPreferences p = ProfilePreferences.get(register.this);
+                        SharedPreferences.Editor pe = p.edit();
                         if (p.getString(ProfilePreferences.KEY_DISPLAY_NAME, "").trim().isEmpty()) {
-                            p.edit()
-                                    .putString(ProfilePreferences.KEY_DISPLAY_NAME, name)
+                            pe.putString(ProfilePreferences.KEY_DISPLAY_NAME, name)
                                     .putString(ProfilePreferences.KEY_EMAIL, email)
                                     .putString(ProfilePreferences.KEY_DOB, dobStr)
-                                    .putString(ProfilePreferences.KEY_GENDER, genderValue)
-                                    .commit();
+                                    .putString(ProfilePreferences.KEY_GENDER, genderValue);
                         }
+                        pe.putString(ProfilePreferences.KEY_LOCATION, regLocation).commit();
                     }
                     final String syncErr = profileSyncError;
                     final SupabaseAuthApi.AuthResponse resFinal = res;
