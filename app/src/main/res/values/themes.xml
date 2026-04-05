@@ -6,18 +6,25 @@
         <item name="postSplashScreenTheme">@style/Theme.MindMatch</item>
     </style>
 
-    <!-- Base application theme. -->
-    <style name="Theme.MindMatch" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
+    <!--
+      Light-only: layouts use fixed light backgrounds (#FFF / #FAFAFA). DayNight made text/hints follow
+      system dark mode → white-on-white on many screens. OEM force-dark can also break EditText contrast.
+    -->
+    <style name="Theme.MindMatch" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/cw_on_surface</item>
+        <item name="android:colorBackground">@color/white</item>
+        <item name="android:textColorPrimary">@color/cw_on_surface</item>
+        <item name="android:textColorSecondary">@color/cw_on_surface_variant</item>
+        <item name="android:textColorHint">@color/cw_input_hint_static</item>
+        <item name="android:editTextColor">@color/cw_on_surface</item>
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>
 </resources>

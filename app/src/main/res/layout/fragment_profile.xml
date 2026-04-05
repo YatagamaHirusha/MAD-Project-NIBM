@@ -129,6 +129,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Display name"
                     app:boxBackgroundMode="outline"
+                    app:hintTextColor="@color/cw_textinput_hint"
                     app:boxCornerRadiusBottomEnd="12dp"
                     app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
@@ -138,7 +139,8 @@
                         android:id="@+id/et_profile_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPersonName" />
+                        android:inputType="textPersonName"
+                        android:textColor="@color/cw_on_surface" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -147,6 +149,7 @@
                     android:layout_marginTop="12dp"
                     android:hint="Email"
                     app:boxBackgroundMode="outline"
+                    app:hintTextColor="@color/cw_textinput_hint"
                     app:boxCornerRadiusBottomEnd="12dp"
                     app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
@@ -156,7 +159,8 @@
                         android:id="@+id/et_profile_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress" />
+                        android:inputType="textEmailAddress"
+                        android:textColor="@color/cw_on_surface" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -165,6 +169,7 @@
                     android:layout_marginTop="12dp"
                     android:hint="Date of birth"
                     app:boxBackgroundMode="outline"
+                    app:hintTextColor="@color/cw_textinput_hint"
                     app:boxCornerRadiusBottomEnd="12dp"
                     app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
@@ -175,7 +180,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
-                        android:inputType="none" />
+                        android:inputType="none"
+                        android:textColor="@color/cw_on_surface" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -185,6 +191,7 @@
                     android:layout_marginTop="12dp"
                     android:hint="@string/profile_gender_hint"
                     app:boxCornerRadiusBottomEnd="12dp"
+                    app:hintTextColor="@color/cw_textinput_hint"
                     app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
                     app:boxCornerRadiusTopStart="12dp">
@@ -193,7 +200,8 @@
                         android:id="@+id/act_profile_gender"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="none" />
+                        android:inputType="none"
+                        android:textColor="@color/cw_on_surface" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -203,6 +211,7 @@
                     android:layout_marginTop="12dp"
                     android:hint="@string/hint_location"
                     app:boxCornerRadiusBottomEnd="12dp"
+                    app:hintTextColor="@color/cw_textinput_hint"
                     app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
                     app:boxCornerRadiusTopStart="12dp">
@@ -211,7 +220,8 @@
                         android:id="@+id/act_profile_location"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="none" />
+                        android:inputType="none"
+                        android:textColor="@color/cw_on_surface" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -221,6 +231,7 @@
                     android:layout_marginTop="12dp"
                     android:hint="@string/hint_occupation"
                     app:boxCornerRadiusBottomEnd="12dp"
+                    app:hintTextColor="@color/cw_textinput_hint"
                     app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
                     app:boxCornerRadiusTopStart="12dp">
@@ -229,7 +240,8 @@
                         android:id="@+id/act_profile_occupation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="none" />
+                        android:inputType="none"
+                        android:textColor="@color/cw_on_surface" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -239,6 +251,7 @@
                     android:layout_marginTop="12dp"
                     android:hint="@string/profile_target_gender_hint"
                     app:boxCornerRadiusBottomEnd="12dp"
+                    app:hintTextColor="@color/cw_textinput_hint"
                     app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
                     app:boxCornerRadiusTopStart="12dp">
@@ -247,7 +260,8 @@
                         android:id="@+id/act_profile_target_gender"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="none" />
+                        android:inputType="none"
+                        android:textColor="@color/cw_on_surface" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -256,6 +270,7 @@
                     android:layout_marginTop="12dp"
                     android:hint="About you"
                     app:boxBackgroundMode="outline"
+                    app:hintTextColor="@color/cw_textinput_hint"
                     app:boxCornerRadiusBottomEnd="12dp"
                     app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
@@ -268,7 +283,8 @@
                         android:gravity="top"
                         android:inputType="textMultiLine"
                         android:lines="4"
-                        android:minLines="3" />
+                        android:minLines="3"
+                        android:textColor="@color/cw_on_surface" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
