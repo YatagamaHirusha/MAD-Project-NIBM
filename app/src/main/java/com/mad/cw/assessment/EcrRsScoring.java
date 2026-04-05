@@ -1,27 +1,19 @@
 package com.mad.cw.assessment;
 
 import androidx.annotation.NonNull;
-import com.mad.cw.assessment.*;
-import com.mad.cw.chat.*;
-import com.mad.cw.inbox.*;
-import com.mad.cw.interests.*;
-import com.mad.cw.matching.*;
-import com.mad.cw.profile.*;
-import com.mad.cw.shell.*;
-import com.mad.cw.welcome.*;
 
 /**
- * Computes ECR-RS–style subscale means from the app’s nine 1–7 Likert items (questions 1–9 in order).
+ * Computes ECR-RS–style subscale means from the app’s Likert items.
  * <p>
- * Mapping (by item content): <strong>Anxiety</strong> — worry about partner’s caring / abandonment (Q7–Q9).
+ * Mapping: <strong>Anxiety</strong> — worry about partner’s caring / abandonment (Q7–Q9).
  * <strong>Avoidance</strong> — discomfort with closeness / dependence (Q5–Q6 direct), comfort with relying
- * and sharing (Q1–Q4 reverse-scored: 8 − score). Each subscale is the mean of its items (standard ECR
- * practice). This matches the wording in {@code activity_questionnaire.xml}, not necessarily every
- * published short-form item order.
+ * and sharing (Q1–Q4 reverse-scored: 8 − score).
+ * <p>
+ * Q10 is a supplemental partner rating item included in raw answers but not part of the standard ECR-RS scales.
  */
 public final class EcrRsScoring {
 
-    public static final int ITEM_COUNT = 9;
+    public static final int ITEM_COUNT = 10;
     public static final int LIKERT_MIN = 1;
     public static final int LIKERT_MAX = 7;
 
@@ -59,6 +51,8 @@ public final class EcrRsScoring {
 
         // Q7–Q9: anxiety
         double anxiety = (answers[6] + answers[7] + answers[8]) / 3.0;
+
+        // Q10 is currently not included in subscale calculations as it is a supplemental item.
 
         return new Result(anxiety, avoidance);
     }

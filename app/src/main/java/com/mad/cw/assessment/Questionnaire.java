@@ -38,6 +38,7 @@ public class Questionnaire extends AppCompatActivity {
             R.id.rg_q7,
             R.id.rg_q8,
             R.id.rg_q9,
+            R.id.rg_q10,
     };
 
     private final ExecutorService io = Executors.newSingleThreadExecutor();

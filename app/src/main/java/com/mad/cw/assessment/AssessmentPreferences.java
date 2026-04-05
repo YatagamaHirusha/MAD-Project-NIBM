@@ -2,14 +2,6 @@ package com.mad.cw.assessment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import com.mad.cw.assessment.*;
-import com.mad.cw.chat.*;
-import com.mad.cw.inbox.*;
-import com.mad.cw.interests.*;
-import com.mad.cw.matching.*;
-import com.mad.cw.profile.*;
-import com.mad.cw.shell.*;
-import com.mad.cw.welcome.*;
 
 /**
  * Persists ECR-RS questionnaire completion, raw answers (1–7 per item), and last computed subscale means.
@@ -29,7 +21,7 @@ public final class AssessmentPreferences {
         return context.getApplicationContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
     }
 
-    /** Stores nine Likert values (questions 1–9) and computed anxiety / avoidance means. */
+    /** Stores Likert values and computed anxiety / avoidance means. */
     public static void saveEcrAnswers(Context context, int[] scores, double anxietyScore, double avoidanceScore) {
         saveEcrAnswers(context, scores, anxietyScore, avoidanceScore, false);
     }
@@ -37,9 +29,10 @@ public final class AssessmentPreferences {
     /**
      * @param synchronousCommit use {@code true} when restoring from the server so the next UI read is consistent
      */
+    //code for viva
     public static void saveEcrAnswers(
             Context context, int[] scores, double anxietyScore, double avoidanceScore, boolean synchronousCommit) {
-        if (scores == null || scores.length != 9) {
+        if (scores == null || scores.length != EcrRsScoring.ITEM_COUNT) {
             return;
         }
         StringBuilder sb = new StringBuilder();

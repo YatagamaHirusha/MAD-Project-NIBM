@@ -3,6 +3,7 @@ package com.mad.cw.supabase.repositories;
 import android.content.Context;
 
 import com.mad.cw.assessment.AssessmentPreferences;
+import com.mad.cw.assessment.EcrRsScoring;
 import com.mad.cw.supabase.core.PostgrestError;
 import com.mad.cw.supabase.core.SessionStore;
 import com.mad.cw.supabase.core.SupabaseRestClient;
@@ -37,7 +38,8 @@ public final class EcrAssessmentRepository {
         if (userId == null || userId.isEmpty()) {
             throw new IOException("Not signed in");
         }
-        if (rawAnswers == null || rawAnswers.length != 9) {
+        //here i change the ercscoring as item count because i added new question for that
+        if (rawAnswers == null || rawAnswers.length != EcrRsScoring.ITEM_COUNT) {
             throw new IOException("Invalid answers length");
         }
 
@@ -111,11 +113,11 @@ public final class EcrAssessmentRepository {
             }
             JSONObject o = arr.getJSONObject(0);
             JSONArray raw = o.getJSONArray("raw_answers");
-            if (raw.length() != 9) {
+            if (raw.length() != EcrRsScoring.ITEM_COUNT) {
                 return;
             }
-            int[] scores = new int[9];
-            for (int i = 0; i < 9; i++) {
+            int[] scores = new int[EcrRsScoring.ITEM_COUNT];
+            for (int i = 0; i < EcrRsScoring.ITEM_COUNT; i++) {
                 scores[i] = raw.getInt(i);
             }
             double anxiety = o.has("anxiety_score") && !o.isNull("anxiety_score")
