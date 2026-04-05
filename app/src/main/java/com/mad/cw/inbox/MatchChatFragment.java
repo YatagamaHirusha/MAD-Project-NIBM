@@ -8,8 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.mad.cw.assessment.*;
 import com.mad.cw.chat.*;
 import com.mad.cw.inbox.*;
@@ -39,6 +41,7 @@ public class MatchChatFragment extends Fragment {
     private ChatMessageAdapter adapter;
     private RecyclerView rv;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
+    private String peerName = "Match";
 
     public MatchChatFragment() {}
 
@@ -61,7 +64,7 @@ public class MatchChatFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String peerName = getArguments() != null ? getArguments().getString(ARG_PEER_NAME, "Match") : "Match";
+        peerName = getArguments() != null ? getArguments().getString(ARG_PEER_NAME, "Match") : "Match";
 
         TextView title = view.findViewById(R.id.tv_match_chat_title);
         title.setText(peerName);
@@ -72,6 +75,24 @@ public class MatchChatFragment extends Fragment {
                 requireActivity().getSupportFragmentManager().popBackStack();
             }
         });
+
+        ImageButton clearChat = view.findViewById(R.id.iv_match_clear_chat);
+        clearChat.setOnClickListener(
+                v -> {
+                    mainHandler.removeCallbacksAndMessages(null);
+                    String peerId =
+                            getArguments() != null ? getArguments().getString(ARG_PEER_ID) : null;
+                    Bundle result = new Bundle();
+                    result.putString(InboxFragment.BUNDLE_PEER_ID, peerId);
+                    requireActivity()
+                            .getSupportFragmentManager()
+                            .setFragmentResult(InboxFragment.REQUEST_REMOVE_CONVERSATION, result);
+                    Toast.makeText(requireContext(), R.string.conversation_removed, Toast.LENGTH_SHORT)
+                            .show();
+                    if (requireActivity().getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                        requireActivity().getSupportFragmentManager().popBackStack();
+                    }
+                });
 
         rv = view.findViewById(R.id.rv_match_messages);
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));

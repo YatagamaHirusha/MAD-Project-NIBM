@@ -57,6 +57,8 @@
     <string name="match_peer_interests_from_profile">From their interests profile</string>
     <string name="cd_open_match_profile">Open profile</string>
     <string name="inbox_subtitle">Conversations with people you have matched with.</string>
+    <string name="chat_cleared">Chat cleared</string>
+    <string name="conversation_removed">Conversation removed</string>
     <string name="dashboard_basic_subtitle_done">Required details saved — you can edit anytime in Profile.</string>
     <string name="dashboard_basic_subtitle_todo">Open Profile to add name, contact, and preferences.</string>
     <string name="cd_clear_chat">Clear conversation</string>

@@ -37,10 +37,24 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/iv_match_clear_chat"
             app:layout_constraintStart_toEndOf="@+id/iv_match_chat_back"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Alex" />
+
+        <ImageButton
+            android:id="@+id/iv_match_clear_chat"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/cd_clear_chat"
+            android:padding="10dp"
+            android:src="@android:drawable/ic_menu_delete"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#9E9E9E" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
